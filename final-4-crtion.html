@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InjiManjal – Organic Food. At the Price it Should Always Be.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --forest-deep: #1E352F;
+    --forest-mid: #2c443d;
+    --forest-light: #3d5850;
+    --forest-pale: #4f6e65;
+    --leaf: #BE5103;
+    --leaf-bright: #d9620b;
+    --gold: #BE5103;
+    --gold-light: #e4c17a;
+    --cream: #FDFBD4;
+    --warm-white: #fdfcf0;
+    --bark: #3E2723;
+    --earth: #543833;
+    --text-dark: #3E2723;
+    --text-mid: #543833;
+    --text-light: #6e4e48;
+    --accent-turmeric: #BE5103;
+    --accent-ginger: #BE5103;
+    --inji-green: #008B10;
+    --manjal-gold: #FFC200;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0f172a; /* Fallback deep slate */
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 8s infinite ease-in-out;
+  }
+
+  @keyframes introFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes loaderPulse {
+    0%, 100% { opacity: 0.35; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-6px); }
+  }
+
+  #intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    background: rgba(10, 19, 17, 0.95);
+    color: var(--cream);
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  .intro-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(30, 53, 47, 0.4) 0%, rgba(10, 19, 17, 0.9) 100%);
+    z-index: 1;
+  }
+
+  .intro-brand {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: introFadeUp 1s ease 0.5s both;
+    pointer-events: none;
+  }
+
+  .intro-brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    color: var(--cream);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.6);
+  }
+
+  .intro-brand .logo-inji { color: var(--inji-green); text-shadow: 1px 1px 2px rgba(167, 64, 0, 0.3); }
+  .intro-brand .logo-manjal { color: var(--manjal-gold); text-shadow: 1px 1px 2px rgba(167, 64, 0, 0.3); }
+
+
+  .intro-brand p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+    color: rgba(253,251,212,0.9);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+
+  .intro-loader {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .intro-loader .dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 999px;
+    background: rgba(253,251,212,0.9);
+    animation: loaderPulse 0.9s infinite ease-in-out;
+  }
+
+  .intro-loader .dot:nth-child(2) { animation-delay: 0.12s; }
+  .intro-loader .dot:nth-child(3) { animation-delay: 0.24s; }
+
+  .intro-skip {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    z-index: 2;
+    background: rgba(30,53,47,0.6);
+    border: 1px solid rgba(253,251,212,0.3);
+    color: var(--cream);
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+
+  .intro-skip:hover {
+    background: var(--leaf);
+    border-color: var(--leaf);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  #main-site {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    position: relative;
+    z-index: 10;
+  }
+
+  #main-site.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 3rem;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.4s ease;
+    background: rgba(30, 53, 47, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom: 1px solid rgba(253, 251, 212, 0.08);
+    box-shadow: 0 8px 32px rgba(10,19,17,0.25);
+  }
+
+  #navbar.scrolled {
+    background: rgba(20, 38, 34, 0.95);
+    box-shadow: 0 10px 40px rgba(10,19,17,0.4);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .nav-logo .logo-inji { color: var(--inji-green); text-shadow: 1px 1px 2px rgba(167, 64, 0, 0.3); }
+  .nav-logo .logo-manjal { color: var(--manjal-gold); text-shadow: 1px 1px 2px rgba(167, 64, 0, 0.3); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links li button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(253,251,212,0.8);
+    background: none;
+    border: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-links li button:hover,
+  .nav-links li button.active {
+    color: var(--gold-light);
+    background: rgba(190,81,3,0.15);
+  }
+
+  .nav-links li .nav-cta {
+    background: linear-gradient(135deg, var(--leaf), var(--gold-light)) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 0.55rem 1.3rem !important;
+    border-radius: 50px !important;
+  }
+
+  .nav-links li .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(190,81,3,0.4) !important;
+  }
+
+  .page {
+    display: none;
+    min-height: 100vh;
+  }
+
+  .page.active { display: block; }
+
+  /* Hero Section Components */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(79,110,101,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(190,81,3,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(44,68,61,0.3) 0%, transparent 50%);
+  }
+
+  .hero-texture {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-leaves {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 55%;
+    background: radial-gradient(ellipse at 70% 40%, rgba(190,81,3,0.12) 0%, transparent 60%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 120px 3rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-text .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-text .tagline::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-light);
+  }
+
+  .hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 5rem);
+    line-height: 1.12;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text h1 em { font-style: italic; color: var(--gold-light); }
+  
+  .hero-text p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(253,251,212,0.85);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-primary, .btn-outline, .btn-dark {
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--leaf), var(--gold-light));
+    color: white;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(190,81,3,0.4); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(253,251,212,0.4);
+  }
+  .btn-outline:hover { border-color: var(--gold-light); color: var(--gold-light); transform: translateY(-3px); }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .hero-stat { background: rgba(30, 53, 47, 0.4); backdrop-filter: blur(8px); padding: 1.5rem; text-align: center; }
+  .hero-stat .num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--cream); display: block; margin-bottom: 0.4rem; }
+  .hero-stat .lbl { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,212,0.6); }
+
+  .hero-visual { display: flex; align-items: center; justify-content: center; position: relative; }
+  
+  .hero-circle {
+    width: 420px; height: 420px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(30, 53, 47, 0.4), rgba(10, 19, 17, 0.6));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(253, 251, 212, 0.15);
+    display: flex; align-items: center; justify-content: center; position: relative;
+    animation: floatOrb 6s ease-in-out infinite;
+  }
+
+  .hero-circle::before {
+    content: ''; position: absolute; inset: -20px; border-radius: 50%;
+    border: 1px dashed rgba(253, 251, 212, 0.2); animation: rotateSlow 20s linear infinite;
+  }
+
+  .hero-circle-inner { text-align: center; padding: 2rem; width: 100%; }
+  .hero-circle-inner .circle-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 1rem; font-style: italic; }
+  .hero-pillars { display: flex; flex-direction: column; gap: 0.8rem; width: 100%; }
+
+  .pillar-item {
+    display: flex; align-items: center; gap: 0.8rem; background: rgba(255,255,255,0.06);
+    padding: 0.8rem 1.2rem; border-radius: 10px; border: 1px solid rgba(253, 251, 212, 0.1);
+    text-align: left;
+  }
+
+  .pillar-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--forest-light), var(--forest-pale));
+    display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+
+  .pillar-text strong { display: block; font-size: 0.85rem; font-weight: 600; color: var(--cream); }
+  .pillar-text span { font-size: 0.75rem; color: rgba(253,251,212,0.6); }
+
+  /* Verse Strip */
+  .verse-banner {
+    background: linear-gradient(to right, rgba(30, 53, 47, 0.85), rgba(18, 34, 30, 0.95));
+    backdrop-filter: blur(12px);
+    padding: 4rem 3rem; text-align: center;
+    border-top: 1px solid rgba(253, 251, 212, 0.1); border-bottom: 1px solid rgba(253, 251, 212, 0.1);
+    position: relative; overflow: hidden;
+  }
+
+  .verse-banner .verse-tamil { font-family: 'Cormorant Garamond', serif; font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--gold-light); letter-spacing: 0.05em; margin-bottom: 1rem; font-style: italic; text-align: center;}
+  .verse-banner .verse-translation { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.6rem); color: var(--cream); max-width: 700px; margin: 0 auto 0.8rem; line-height: 1.6; font-style: italic; }
+  .verse-banner .verse-attr { font-size: 0.8rem; color: rgba(253,251,212,0.5); letter-spacing: 0.2em; text-transform: uppercase; }
+
+  /* Structural Content Modules */
+  .section { padding: 6rem 3rem; max-width: 1280px; margin: 0 auto; }
+  .section-tag { font-family: 'Cormorant Garamond', serif; font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+  .section-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold-light); }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.2; color: var(--cream); margin-bottom: 1.5rem; }
+  .section-subtitle { font-size: 1.05rem; color: rgba(253,251,212,0.8); line-height: 1.75; max-width: 580px; }
+
+  .stats-full { background: rgba(20, 35, 31, 0.75); backdrop-filter: blur(15px); padding: 5rem 3rem; border-top: 1px solid rgba(255,255,255,0.05); }
+  .stats-full-inner { max-width: 1280px; margin: 0 auto; }
+  .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden; margin-top: 3rem; }
+  .stat-card { background: rgba(10, 20, 18, 0.4); padding: 2.5rem 1.5rem; text-align: center; transition: background 0.3s ease; }
+  .stat-card:hover { background: rgba(190,81,3,0.2); }
+  .stat-card .big-num { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3vw, 3rem); font-weight: 700; color: var(--cream); display: block; margin-bottom: 0.5rem; }
+  .stat-card .stat-label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,212,0.6); line-height: 1.5; }
+
+  .mission-section { padding: 6rem 3rem; background: transparent; }
+  .mission-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .mission-card-stack { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  
+  .m-card { 
+    background: rgba(30, 53, 47, 0.65); 
+    backdrop-filter: blur(12px);
+    border-radius: 16px; padding: 2rem 1.5rem; 
+    border: 1px solid rgba(253, 251, 212, 0.15); 
+    box-shadow: 0 4px 30px rgba(0,0,0,0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  }
+  .m-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .m-card:nth-child(2) { margin-top: 2rem; }
+  .m-card:nth-child(4) { margin-top: -2rem; }
+  .m-card-icon { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--forest-light), var(--forest-pale)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+  .m-card h4 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--cream); margin-bottom: 0.5rem; }
+  .m-card p { font-size: 0.85rem; color: rgba(253, 251, 212, 0.75); line-height: 1.6; }
+
+  .chain-section { background: rgba(15, 28, 25, 0.8); backdrop-filter: blur(10px); padding: 6rem 3rem; }
+  .chain-inner { max-width: 1280px; margin: 0 auto; }
+  .chain-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; margin-top: 4rem; }
+  .chain-steps::before { content: ''; position: absolute; top: 36px; left: 12%; right: 12%; height: 2px; background: linear-gradient(to right, var(--leaf), var(--gold-light), var(--leaf)); z-index: 0; }
+  .chain-step { text-align: center; padding: 0 1.5rem; position: relative; z-index: 1; }
+  .chain-num { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--leaf), var(--gold-light)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; position: relative; }
+  .chain-num::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(190,81,3,0.3); }
+  .chain-step h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 0.8rem; }
+  .chain-step p { font-size: 0.85rem; color: rgba(253,251,212,0.7); line-height: 1.6; }
+
+  .problem-section { padding: 6rem 3rem; background: transparent; }
+  .problem-inner { max-width: 1280px; margin: 0 auto; }
+  .problem-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+  
+  .problem-card { 
+    background: rgba(20, 35, 32, 0.6); 
+    backdrop-filter: blur(15px);
+    border-radius: 20px; padding: 2.5rem 2rem; 
+    border: 1px solid rgba(253, 251, 212, 0.12); 
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25); 
+    transition: transform 0.3s ease; position: relative; overflow: hidden; 
+  }
+  .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, var(--forest-light), var(--forest-pale)); }
+  .problem-card:hover { transform: translateY(-6px); }
+  .problem-card .p-num { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; color: var(--gold-light); line-height: 1; margin-bottom: 0.8rem; }
+  .problem-card h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); margin-bottom: 0.8rem; }
+  .problem-card p { font-size: 0.9rem; color: rgba(253, 251, 212, 0.75); line-height: 1.7; }
+
+  /* About Sourcing Left Text Contrast Overrides */
+  .about-text-wrapper {
+    background: rgba(15, 28, 25, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(253, 251, 212, 0.1);
+  }
+  .about-text h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--cream); margin-bottom: 1.5rem; line-height: 1.3; }
+  .about-text p { font-size: 1rem; color: rgba(253, 251, 212, 0.85); line-height: 1.85; margin-bottom: 1.5rem; }
+  .about-text .highlight { background: rgba(190, 81, 3, 0.15); border-left: 4px solid var(--gold-light); padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; margin: 2rem 0; }
+  .about-text .highlight p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--cream); font-style: italic; margin: 0; }
+
+  /* About Module Setup */
+  .about-hero { min-height: 65vh; background: linear-gradient(135deg, rgba(30, 53, 47, 0.4) 0%, rgba(18, 34, 30, 0.6) 100%); display: flex; align-items: center; padding: 8rem 3rem 5rem; position: relative; overflow: hidden; }
+  .about-hero-inner { max-width: 1280px; margin: 0 auto; width: 100%; }
+  .about-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--cream); line-height: 1.1; margin-bottom: 1.5rem; }
+  .about-hero h1 em { color: var(--gold-light); font-style: italic; }
+  .about-hero p { font-size: 1.1rem; color: rgba(253,251,212,0.8); max-width: 600px; line-height: 1.8; }
+  
+  .about-content { padding: 6rem 3rem; max-width: 1280px; margin: 0 auto; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; margin-bottom: 5rem; }
+  
+  .name-meaning { background: rgba(20, 38, 34, 0.85); backdrop-filter: blur(15px); border-radius: 24px; padding: 3rem; margin-top: 0rem; border: 1px solid rgba(253, 251, 212, 0.15); }
+  .name-meaning h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--cream); margin-bottom: 2rem; font-style: italic; border-bottom: 1px solid rgba(253,251,212,0.1); padding-bottom: 0.75rem; }
+  .name-item { display: flex; gap: 1.2rem; padding: 1.5rem 0; border-bottom: 1px solid rgba(253,251,212,0.1); }
+  .name-item:last-child { border-bottom: none; }
+  .name-word { font-family: 'Playfair Display', serif; font-size: 1.75rem; color: var(--gold-light); min-width: 110px; font-weight: 600; }
+  .name-desc strong { display: block; font-size: 1.05rem; font-weight: 600; color: var(--cream); margin-bottom: 0.4rem; }
+  .name-desc span { font-size: 0.9rem; color: rgba(253, 251, 212, 0.75); line-height: 1.6; }
+
+  .three-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem; }
+  
+  .pillar-card { 
+    background: rgba(30, 53, 47, 0.6); 
+    backdrop-filter: blur(12px);
+    border-radius: 20px; padding: 2.5rem 2rem; 
+    border: 1px solid rgba(253, 251, 212, 0.15); 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
+    text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; 
+  }
+  .pillar-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--forest-light), var(--forest-pale)); transform: scaleX(0); transition: transform 0.3s ease; }
+  .pillar-card:hover { transform: translateY(-8px); }
+  .pillar-card:hover::after { transform: scaleX(1); }
+  .pillar-card .p-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .pillar-card h3 { font-family: 'Playfair Display', serif; font-size: 1.30rem; color: var(--cream); margin-bottom: 0.8rem; }
+  .pillar-card p { font-size: 0.9rem; color: rgba(253, 251, 212, 0.75); line-height: 1.7; }
+
+  /* Products Module Setup */
+  .products-hero { background: linear-gradient(135deg, rgba(30, 53, 47, 0.4), rgba(44, 68, 61, 0.5)); padding: 8rem 3rem 4rem; text-align: center; }
+  .products-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--cream); margin-bottom: 1rem; }
+  .products-hero p { color: rgba(253,251,212,0.7); font-size: 1rem; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+  .products-page { padding: 5rem 3rem; max-width: 1280px; margin: 0 auto; }
+  .product-filters { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 3rem; justify-content: center; }
+  
+  .filter-btn { 
+    padding: 0.55rem 1.4rem; border-radius: 50px; 
+    border: 1px solid rgba(253, 251, 212, 0.2); 
+    background: rgba(30, 53, 47, 0.6); 
+    color: var(--cream); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.25s ease; 
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--gold-light); color: var(--forest-deep); border-color: var(--gold-light); }
+  
+  .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  
+  .product-card { 
+    background: rgba(20, 38, 34, 0.7); 
+    backdrop-filter: blur(10px);
+    border-radius: 20px; overflow: hidden; 
+    border: 1px solid rgba(253, 251, 212, 0.12); 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: all 0.3s ease; 
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: 0 16px 50px rgba(0,0,0,0.4); }
+  .product-img { height: 180px; background: linear-gradient(135deg, var(--forest-mid), var(--forest-pale)); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; }
+  .product-badge { position: absolute; top: 12px; right: 12px; background: var(--leaf); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 50px; }
+  .product-info { padding: 1.4rem; }
+  .product-cat { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); font-weight: 600; margin-bottom: 0.4rem; }
+  .product-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--cream); margin-bottom: 0.5rem; line-height: 1.3; }
+  .product-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .product-tag { font-size: 0.7rem; color: var(--cream); background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(253, 251, 212, 0.2); padding: 0.2rem 0.6rem; border-radius: 50px; }
+  .product-price { display: flex; align-items: center; justify-content: space-between; }
+  .price-im { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--cream); }
+  .price-store { font-size: 0.8rem; color: rgba(253, 251, 212, 0.5); text-decoration: line-through; }
+  .price-save { font-size: 0.72rem; font-weight: 700; color: white; background: var(--leaf); padding: 0.2rem 0.5rem; border-radius: 50px; }
+
+  /* Pricing Module Table Setup */
+  .pricing-hero { background: linear-gradient(135deg, rgba(62, 39, 35, 0.4), rgba(30, 53, 47, 0.5)); padding: 8rem 3rem 5rem; text-align: center; position: relative; overflow: hidden; }
+  .pricing-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--cream); position: relative; z-index: 1; }
+  .pricing-hero p { position: relative; z-index: 1; color: rgba(253,251,212,0.7); font-size: 1rem; max-width: 500px; margin: 1rem auto 0; line-height: 1.7; }
+  .pricing-page { padding: 5rem 3rem; max-width: 1000px; margin: 0 auto; }
+  
+  .pricing-table { 
+    background: rgba(20, 38, 34, 0.75); 
+    backdrop-filter: blur(15px);
+    border-radius: 24px; overflow: hidden; 
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3); 
+    border: 1px solid rgba(253, 251, 212, 0.15); 
+  }
+  .pricing-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; background: rgba(10, 20, 18, 0.8); padding: 1.2rem 2rem; gap: 1rem; }
+  .pricing-table-head span { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(253,251,212,0.5); font-weight: 600; }
+  .pricing-table-head span:last-child { color: var(--cream); }
+  .pricing-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 1.5rem 2rem; gap: 1rem; align-items: center; border-bottom: 1px solid rgba(253,251,212,0.1); }
+  .pricing-row:last-child { border-bottom: none; }
+  .pricing-product { display: flex; align-items: center; gap: 1rem; }
+  .pricing-product .p-ico { font-size: 1.8rem; }
+  .pricing-product .p-details strong { display: block; font-size: 1rem; font-weight: 600; color: var(--cream); margin-bottom: 0.2rem; }
+  .pricing-product .p-details span { font-size: 0.8rem; color: rgba(253, 251, 212, 0.6); }
+  .pricing-row .store-price { font-size: 0.95rem; color: rgba(253, 251, 212, 0.5); text-decoration: line-through; }
+  .pricing-row .im-price { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold-light); }
+  .pricing-row .savings-badge { background: linear-gradient(135deg, var(--forest-light), var(--forest-pale)); color: white; font-size: 0.78rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: 50px; display: inline-block; }
+  
+  .explainer-card { 
+    background: rgba(30, 53, 47, 0.6); 
+    backdrop-filter: blur(12px);
+    border-radius: 20px; padding: 2rem; 
+    border: 1px solid rgba(253, 251, 212, 0.15); 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
+  }
+  .explainer-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--cream); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .explainer-card p { font-size: 0.9rem; color: rgba(253, 251, 212, 0.75); line-height: 1.75; }
+
+  /* Contact Setup Container */
+  .contact-page { min-height: 100vh; background: transparent; padding-top: 72px; }
+  .contact-hero { background: linear-gradient(135deg, rgba(30, 53, 47, 0.4) 0%, rgba(44, 68, 61, 0.5) 100%); padding: 5rem 3rem; text-align: center; }
+  .contact-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--cream); margin-bottom: 1rem; }
+  .contact-hero p { color: rgba(253,251,212,0.7); font-size: 1rem; max-width: 450px; margin: 0 auto; line-height: 1.7; }
+  .contact-content { padding: 5rem 3rem; max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start; }
+  .contact-info h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--cream); margin-bottom: 1.5rem; }
+  .contact-info-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
+  .contact-info-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--forest-light), var(--forest-pale)); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .contact-info-text strong { display: block; font-size: 0.85rem; font-weight: 600; color: var(--cream); margin-bottom: 0.2rem; }
+  .contact-info-text span { font-size: 0.85rem; color: rgba(253, 251, 212, 0.75); line-height: 1.5; }
+  
+  .contact-form-card { 
+    background: rgba(20, 38, 34, 0.75); 
+    backdrop-filter: blur(15px);
+    border-radius: 24px; padding: 2.5rem; 
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3); 
+    border: 1px solid rgba(253, 251, 212, 0.15); 
+  }
+  .contact-form-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--cream); margin-bottom: 0.5rem; }
+  .contact-form-card p { font-size: 0.88rem; color: rgba(253, 251, 212, 0.7); margin-bottom: 2rem; }
+  .form-group { margin-bottom: 1.4rem; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.5rem; }
+  
+  .form-group input, .form-group select, .form-group textarea { 
+    width: 100%; padding: 0.8rem 1.1rem; 
+    border: 1px solid rgba(253, 251, 212, 0.2); 
+    border-radius: 10px; font-size: 0.9rem; font-family: 'DM Sans', sans-serif; 
+    color: var(--cream); background: rgba(10, 20, 18, 0.5); outline: none; resize: none; 
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(253, 251, 212, 0.4); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  footer { background: rgba(10, 20, 18, 0.9); backdrop-filter: blur(10px); padding: 4rem 3rem 2rem; position: relative; margin-top: 4rem; }
+  footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--leaf), var(--gold-light), var(--leaf)); }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); margin-bottom: 1rem; display: block; }
+  .footer-brand .logo span { color: var(--gold-light); }
+  .footer-brand p { font-size: 0.85rem; color: rgba(253,251,212,0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+  .footer-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.9rem; color: var(--gold-light); border-left: 2px solid var(--gold-light); padding-left: 1rem; }
+  .footer-col h4 { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(253,251,212,0.5); margin-bottom: 1.2rem; font-weight: 600; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-col ul li { font-size: 0.85rem; color: rgba(253,251,212,0.6); cursor: pointer; transition: color 0.2s ease; }
+  .footer-col ul li:hover { color: var(--gold-light); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-size: 0.78rem; color: rgba(253,251,212,0.4); }
+  .footer-bottom .badges { display: flex; gap: 0.8rem; }
+  .badge { font-size: 0.7rem; padding: 0.3rem 0.8rem; border-radius: 50px; border: 1px solid rgba(190,81,3,0.25); color: var(--cream); }
+
+  /* Smooth Intersection Entrance Triggers */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* Media Breakpoints layout fixes */
+  @media (max-width: 1024px) {
+    .hero-content, .mission-inner, .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .chain-steps { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .chain-steps::before { display: none; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .three-pillars { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    #navbar { padding: 0 1.5rem; }
+    .section, .products-page, .pricing-page, .contact-content { padding: 3rem 1.5rem; }
+    .hero-content { padding: 100px 1.5rem 1.5rem; grid-template-columns: 1fr; }
+    .products-grid, .problem-cards, .pricing-explainer, .contact-content { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-circle { width: 280px; height: 280px; }
+    .pricing-table-head, .pricing-row { grid-template-columns: 1fr 1fr 1fr; }
+    .pricing-table-head span:nth-child(2), .pricing-row .store-price { display: none; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="fixed inset-0 z-0 bg-cover bg-center scale-105" 
+       style="background-image: linear-gradient(to bottom, rgba(15, 28, 25, 0.8), rgba(10, 20, 18, 0.93)), url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1920&q=80');">
+  </div>
+
+  <div id="intro-screen" style="background-image: linear-gradient(to bottom, rgba(15, 28, 25, 0.75), rgba(10, 20, 18, 0.92)), url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+    <div class="intro-overlay"></div>
+    <div class="intro-loader">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    <div class="intro-brand">
+      <h1><span class="logo-inji">Inji</span><span class="logo-manjal">Manjal</span></h1>
+      <p>Project 331 &nbsp;·&nbsp; Organic Food. At the Price it Should Always Be.</p>
+    </div>
+    <button class="intro-skip" onclick="launchSite()">Enter Site ›</button>
+  </div>
+
+  <div id="main-site">
+    <nav id="navbar">
+      <div class="nav-logo" onclick="showPage('home')">
+        <span class="logo-inji">Inji</span><span class="logo-manjal">Manjal</span>
+      </div>
+      <ul class="nav-links">
+        <li><button class="active" data-page="home" onclick="showPage('home')">Home</button></li>
+        <li><button data-page="about" onclick="showPage('about')">About</button></li>
+        <li><button data-page="products" onclick="showPage('products')">Products</button></li>
+        <li><button data-page="pricing" onclick="showPage('pricing')">Price Truth</button></li>
+        <li><button data-page="contact" onclick="showPage('contact')">Contact</button></li>
+        <li><button class="nav-cta" onclick="showPage('products')">Shop Now →</button></li>
+      </ul>
+    </nav>
+
+    <div id="page-home" class="page active">
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-texture"></div>
+        <div class="hero-leaves"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="tagline">Project 331</div>
+            <h1>Organic Food.<br><em>At the Price it<br>Should Always Be.</em></h1>
+            <p>Pesticide-free, non-GMO, and indigenous food sourced straight from Tamil soil — delivered directly to your door, cutting out every middleman.</p>
+            <div class="hero-btns">
+              <button class="btn-primary" onclick="showPage('products')">Explore Products →</button>
+              <button class="btn-outline" onclick="showPage('about')">Our Story</button>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="num">0</span>
+                <span class="lbl">Synthetic Pesticides</span>
+              </div>
+              <div class="hero-stat">
+                <span class="num">25+</span>
+                <span class="lbl">Indigenous Products</span>
+              </div>
+              <div class="hero-stat">
+                <span class="num">40%</span>
+                <span class="lbl">Below Store Prices</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-circle">
+              <div class="hero-circle-inner">
+                <div class="circle-title">Three Pillars</div>
+                <div class="hero-pillars">
+                  <div class="pillar-item">
+                    <div class="pillar-icon">🌿</div>
+                    <div class="pillar-text">
+                      <strong>Organic. Always.</strong>
+                      <span>No pesticides. No synthetic fertilizers.</span>
+                    </div>
+                  </div>
+                  <div class="pillar-item">
+                    <div class="pillar-icon">🌱</div>
+                    <div class="pillar-text">
+                      <strong>Non-GMO. Verified.</strong>
+                      <span>Indigenous seeds, passed down for generations.</span>
+                    </div>
+                  </div>
+                  <div class="pillar-item">
+                    <div class="pillar-icon">🤝</div>
+                    <div class="pillar-text">
+                      <strong>For Everyone.</strong>
+                      <span>Clean food shouldn't be a luxury.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="verse-banner">
+        <div class="verse-tamil">"நில்லாதவற்றை நிலையின என்று உணரும்<br>புல்லறிவு ஆண்மை கடை"</div>
+        <div class="verse-translation">"It is the height of foolishness to mistake the unstable for the stable — to be fooled by what appears true but is not."</div>
+        <div class="verse-attr">— Thirukkural, Verse 331 · Thiruvalluvar · The Guiding Principle of Project 331</div>
+      </div>
+
+      <div class="stats-full fade-up">
+        <div class="stats-full-inner">
+          <div class="section-tag">The Real Numbers</div>
+          <h2 class="section-title" style="margin-bottom:0.5rem;">Why the System is Broken</h2>
+          <p style="color:rgba(253,251,212,0.7);font-size:0.95rem;max-width:500px; margin-bottom: 2rem;">The numbers behind why InjiManjal exists — and why it matters.</p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="big-num">47%</span>
+              <span class="stat-label">Average premium on organic food vs conventional at grocery chains</span>
+            </div>
+            <div class="stat-card">
+              <span class="big-num">3–5</span>
+              <span class="stat-label">Middlemen between a farmer and your table, adding cost without value</span>
+            </div>
+            <div class="stat-card">
+              <span class="big-num">1 in 3</span>
+              <span class="stat-label">Families priced out of eating clean and organic</span>
+            </div>
+            <div class="stat-card">
+              <span class="big-num">0</span>
+              <span class="stat-label">GMO ingredients — ever. Indigenous seeds only.</span>
+            </div>
+            <div class="stat-card">
+              <span class="big-num">100%</span>
+              <span class="stat-label">Direct from Tamil soil — named farms, full transparency</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="mission-section fade-up">
+        <div class="mission-inner">
+          <div class="mission-visual">
+            <div class="mission-card-stack">
+              <div class="m-card">
+                <div class="m-card-icon">🌾</div>
+                <h4>Heritage Rice</h4>
+                <p>Black Kavuni, Seeraga Samba, Sivan Samba Ponni — ancient varieties grown without compromise.</p>
+              </div>
+              <div class="m-card">
+                <div class="m-card-icon">🍯</div>
+                <h4>Herbal Wellness</h4>
+                <p>Raw honey, honey figs, butterfly pea flower — wild-sourced, unprocessed, no additives.</p>
+              </div>
+              <div class="m-card">
+                <div class="m-card-icon">🫙</div>
+                <h4>Traditional Condiments</h4>
+                <p>Small-batch Vallarai, curry leaf podi, drumstick dal powder — crafted the old way.</p>
+              </div>
+              <div class="m-card">
+                <div class="m-card-icon">🌞</div>
+                <h4>Crunchy Snacks</h4>
+                <p>Sun-dried rice vadam, onion vadam, cluster beans vathal — no factory processing.</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="section-tag">Our Mission</div>
+            <h2 class="section-title">Clean Food.<br>Honest Prices.<br>Ancient Roots.</h2>
+            <p class="section-subtitle">Healthy eating has been made artificially expensive by middlemen. InjiManjal cuts out distributors and retail markups entirely — shipping directly from Tamil farms to your door.</p>
+            <br>
+            <p style="color:rgba(253, 251, 212, 0.85);font-size:0.95rem;line-height:1.8;">By buying direct from the source, we protect farmers from market pressure, preserve indigenous crop varieties that are disappearing, and pass the savings on to every family that deserves access to clean food.</p>
+            <br>
+            <button class="btn-primary" style="margin-top:1rem;" onclick="showPage('about')">Read Our Full Story →</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="chain-section fade-up">
+        <div class="chain-inner">
+          <div class="section-tag">Radical Transparency</div>
+          <h2 class="section-title">From Tamil Soil to Your Door</h2>
+          <div class="chain-steps">
+            <div class="chain-step">
+              <div class="chain-num">1</div>
+              <h4>Named Farms & Villages</h4>
+              <p>Every product traces back to a specific farm on Tamil soil. 100% origin transparency, no exceptions.</p>
+            </div>
+            <div class="chain-step">
+              <div class="chain-num">2</div>
+              <h4>Zero Pesticides, Zero GMO</h4>
+              <p>Ancient farming methods, unchanged for generations. Natural inputs only. No laboratory interference.</p>
+            </div>
+            <div class="chain-step">
+              <div class="chain-num">3</div>
+              <h4>Direct to Your Door</h4>
+              <p>No distributors. No retail shelves. No markups. Straight from the farm to your family.</p>
+            </div>
+            <div class="chain-step">
+              <div class="chain-num">4</div>
+              <h4>Farmers Paid Fairly</h4>
+              <p>Crops bought at source for what they genuinely deserve, protecting farmers from market pressures.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="problem-section fade-up">
+        <div class="problem-inner">
+          <div class="section-tag">The Problem We're Solving</div>
+          <h2 class="section-title">Why This Matters</h2>
+          <div class="problem-cards">
+            <div class="problem-card">
+              <div class="p-num">47%</div>
+              <h4>The Organic Premium Myth</h4>
+              <p>Major grocery chains mark up organic products by an average of 47% over conventional food — not because it costs that much to grow, but because of the system in between.</p>
+            </div>
+            <div class="problem-card">
+              <div class="p-num">3–5×</div>
+              <h4>The Middleman Problem</h4>
+              <p>Between a Tamil farmer and your table, there are 3 to 5 intermediaries — wholesalers, retailers — adding cost without adding value to the food itself.</p>
+            </div>
+            <div class="problem-card">
+              <div class="p-num">1 in 3</div>
+              <h4>Families Priced Out</h4>
+              <p>One in three families wants to eat clean and organic but are priced out of it. Healthy eating has become a luxury item. That is the injustice Project 331 was born to fix.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta-strip">
+        <h2>Taste the Difference. Feel the Difference.</h2>
+        <p>25+ indigenous products sourced directly from Tamil Nadu — pesticide-free, non-GMO, and priced for every family.</p>
+        <button class="btn-dark" onclick="showPage('products')">Browse All Products →</button>
+      </div>
+    </div>
+
+    <div id="page-about" class="page">
+      <div style="padding-top:72px;">
+        <div class="about-hero">
+          <div class="about-hero-inner">
+            <div class="section-tag">Our Story</div>
+            <h1>Ancient Wisdom.<br><em>Honest Pricing.</em><br>Tamil Roots.</h1>
+            <p>InjiManjal was born from a truth: honest food grown with care should never cost more than food that harms the land it grows on.</p>
+          </div>
+        </div>
+
+        <div class="about-content">
+          <div class="about-grid fade-up">
+            <div class="about-text-wrapper">
+              <div class="about-text">
+                <h2>The Name That Tells the Story</h2>
+                <p>Every word in our brand name carries the weight of generations. <strong>Inji</strong> — ginger — is the first healer a Tamil grandmother reaches for. <strong>Manjal</strong> — turmeric — is the golden ingredient in Tamil homes, food, and rituals for over 4,000 years.</p>
+                <p>Together, they don't just represent products. They represent a philosophy: that ancient wisdom about growing and eating clean food is not a premium lifestyle choice. It is simply the way food should be.</p>
+                <div class="highlight">
+                  <p>"The brand aims to provide pesticide-free, non-GMO, and indigenous food sourced straight from Tamil soil — directly to every family's table, at the price it should always have been."</p>
+                </div>
+              </div>
+            </div>
+            <div class="name-meaning">
+              <h3>The Meaning Behind the Name</h3>
+              <div class="name-item">
+                <div class="name-word">Inji</div>
+                <div class="name-desc">
+                  <strong>Ginger — The Primary Healer</strong>
+                  <span>The first ingredient a Tamil grandmother reaches for when someone is unwell. Warming, anti-inflammatory, grounding.</span>
+                </div>
+              </div>
+              <div class="name-item">
+                <div class="name-word">Manjal</div>
+                <div class="name-desc">
+                  <strong>Turmeric — The Golden Healer</strong>
+                  <span>Used in Tamil homes, food, medicine, and sacred rituals for thousands of years. The golden thread connecting Tamil culture to its land.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="three-pillars fade-up">
+            <div class="pillar-card">
+              <span class="p-emoji">🌿</span>
+              <h3>Organic. Always.</h3>
+              <p>No synthetic pesticides. No synthetic fertilizers. Ever. Not as a marketing claim — as an absolute commitment to the farms we partner with.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="p-emoji">🌱</span>
+              <h3>Non-GMO. Verified.</h3>
+              <p>Using indigenous seeds passed down through generations without any laboratory interference. The varieties our grandparents grew.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="p-emoji">🤝</span>
+              <h3>For Everyone.</h3>
+              <p>Clean food is not a premium luxury for the privileged few. It is a right. We price our products to be accessible to every family.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-products" class="page">
+      <div style="padding-top:72px;">
+        <div class="products-hero">
+          <div class="section-tag" style="justify-content:center; margin-bottom:1rem;">25+ Indigenous Products</div>
+          <h1>From Tamil Soil,<br>To Your Table</h1>
+          <p>Every product sourced from named farms, grown without pesticides, priced without the middleman.</p>
+        </div>
+
+        <div class="products-page">
+          <div class="product-filters">
+            <button class="filter-btn active" onclick="filterProducts('all', this)">All Products</button>
+            <button class="filter-btn" onclick="filterProducts('rice', this)">Heritage Rice</button>
+            <button class="filter-btn" onclick="filterProducts('wellness', this)">Herbal Wellness</button>
+            <button class="filter-btn" onclick="filterProducts('tea', this)">Teas</button>
+            <button class="filter-btn" onclick="filterProducts('soup', this)">Soups & Porridges</button>
+          </div>
+
+          <div class="products-grid" id="products-grid">
+            <div class="product-card" data-cat="rice">
+              <div class="product-img" style="background:linear-gradient(135deg,#1E352F,#3E2723);">🌾<div class="product-badge">Heritage</div></div>
+              <div class="product-info">
+                <div class="product-cat">Heritage Rice</div>
+                <div class="product-name">Black Kavuni Rice</div>
+                <div class="product-tags"><span class="product-tag">Non-GMO</span><span class="product-tag">Pesticide-Free</span></div>
+                <div class="product-price"><span class="price-im">$5.49 <small style="font-size:0.7rem;font-weight:400;">/ kg</small></span><span class="price-store">$8.99</span><span class="price-save">Save 39%</span></div>
+              </div>
+            </div>
+            <div class="product-card" data-cat="rice">
+              <div class="product-img" style="background:linear-gradient(135deg,#2c443d,#4f6e65);">🌾<div class="product-badge">Heritage</div></div>
+              <div class="product-info">
+                <div class="product-cat">Heritage Rice</div>
+                <div class="product-name">Seeraga Samba Rice</div>
+                <div class="product-tags"><span class="product-tag">Non-GMO</span><span class="product-tag">Aromatic</span></div>
+                <div class="product-price"><span class="price-im">$5.99 <small style="font-size:0.7rem;font-weight:400;">/ kg</small></span><span class="price-store">$9.49</span><span class="price-save">Save 37%</span></div>
+              </div>
+            </div>
+            <div class="product-card" data-cat="wellness">
+              <div class="product-img" style="background:linear-gradient(135deg,#1E352F,#543833);">🍯<div class="product-badge">Raw</div></div>
+              <div class="product-info">
+                <div class="product-cat">Herbal Wellness</div>
+                <div class="product-name">Pure Wild Forest Honey</div>
+                <div class="product-tags"><span class="product-tag">Raw</span><span class="product-tag">Wild-Sourced</span></div>
+                <div class="product-price"><span class="price-im">$7.99 <small style="font-size:0.7rem;font-weight:400;">/ 250g</small></span><span class="price-store">$12.99</span><span class="price-save">Save 38%</span></div>
+              </div>
+            </div>
+            <div class="product-card" data-cat="tea">
+              <div class="product-img" style="background:linear-gradient(135deg,#2c443d,#3E2723);">🫖<div class="product-badge">Organic</div></div>
+              <div class="product-info">
+                <div class="product-cat">Teas</div>
+                <div class="product-name">Lemon Butterfly Pea Tea</div>
+                <div class="product-tags"><span class="product-tag">Caffeine-Free</span><span class="product-tag">Organic</span></div>
+                <div class="product-price"><span class="price-im">$4.49 <small style="font-size:0.7rem;font-weight:400;">/ 30 bags</small></span><span class="price-store">$7.49</span><span class="price-save">Save 40%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-pricing" class="page">
+      <div style="padding-top:72px;">
+        <div class="pricing-hero">
+          <div class="section-tag" style="justify-content:center;margin-bottom:1rem;">Radical Price Transparency</div>
+          <h1>The <span>Price Truth</span></h1>
+          <p>We publish our prices side-by-side with major health food stores because honest food deserves transparent pricing.</p>
+        </div>
+
+        <div class="pricing-page">
+          <div class="pricing-table fade-up">
+            <div class="pricing-table-head">
+              <span>Product</span>
+              <span>Store Price</span>
+              <span>InjiManjal</span>
+              <span>You Save</span>
+            </div>
+            <div class="pricing-row">
+              <div class="pricing-product"><span class="p-ico">🌾</span><div class="p-details"><strong>Heritage Black Rice</strong><span>1 kg · Non-GMO</span></div></div>
+              <span class="store-price">$8.99</span>
+              <span class="im-price">$5.49</span>
+              <span class="savings-badge">Save 39%</span>
+            </div>
+            <div class="pricing-row">
+              <div class="pricing-product"><span class="p-ico">🍯</span><div class="p-details"><strong>Wild Forest Honey</strong><span>250g · Raw</span></div></div>
+              <span class="store-price">$12.99</span>
+              <span class="im-price">$7.99</span>
+              <span class="savings-badge">Save 38%</span>
+            </div>
+          </div>
+
+          <div class="pricing-explainer fade-up">
+            <div class="explainer-card">
+              <h3>🔗 Why Are We Cheaper?</h3>
+              <p>InjiManjal eliminates distributor markups entirely. We buy directly from named farms at fair prices, and ship directly to your door. The result: you pay 37–43% less for food that is actually better.</p>
+            </div>
+            <div class="explainer-card">
+              <h3>💰 The 47% Premium Myth</h3>
+              <p>The organic premium exists not because organic farming is more expensive — it exists because of the long supply chain infrastructure built around retail networks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-contact" class="page">
+      <div class="contact-page">
+        <div class="contact-hero">
+          <div class="section-tag" style="justify-content:center;margin-bottom:1rem;">Get in Touch</div>
+          <h1>Talk to Us</h1>
+          <p>Questions about our products, sourcing, or pricing? We're here.</p>
+        </div>
+
+        <div class="contact-content fade-up">
+          <div class="contact-info">
+            <h3>We'd Love to Hear From You</h3>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">📧</div>
+              <div class="contact-info-text">
+                <strong>Email Us</strong>
+                <span>info@injimanjal.com</span>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-icon">📍</div>
+              <div class="contact-info-text">
+                <strong>Source Location</strong>
+                <span>Tamil Nadu, India</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-card">
+            <h3>Send a Message</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" placeholder="Aarav">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Kumar">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="4" placeholder="Tell us what's on your mind..."></textarea>
+            </div>
+            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="handleContactSubmit(this)">Send Message →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo"><span>Inji</span>·<em>Manjal</em></span>
+          <p>Pesticide-free, non-GMO indigenous food from Tamil Nadu, delivered directly to your door.</p>
+          <div class="footer-tagline">Organic Food. At the Price it Should Always Be.</div>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li onclick="showPage('home')">Home</li>
+            <li onclick="showPage('about')">About Us</li>
+            <li onclick="showPage('products')">Our Products</li>
+            <li onclick="showPage('pricing')">Price Truth</li>
+            <li onclick="showPage('contact')">Contact</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Values</h4>
+          <ul>
+            <li>0 Pesticides</li>
+            <li>0 GMO</li>
+            <li>100% Tamil Soil</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 InjiManjal – Project 331. All rights reserved. 100% Tamil Soil.</p>
+        <div class="badges">
+          <span class="badge">🌿 Organic</span>
+          <span class="badge">✅ Non-GMO</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  const introScreen = document.getElementById('intro-screen');
+  const mainSite = document.getElementById('main-site');
+
+  function launchSite() {
+    introScreen.style.opacity = '0';
+    introScreen.style.visibility = 'hidden';
+    mainSite.classList.add('visible');
+    setTimeout(() => {
+      introScreen.style.display = 'none';
+    }, 800);
+  }
+
+  // Fallback protection mount
+  setTimeout(() => {
+    if (introScreen && introScreen.style.display !== 'none') launchSite();
+  }, 3000);
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active', 'page-enter');
+    });
+    
+    const target = document.getElementById('page-' + name);
+    if(target) {
+      target.classList.add('active');
+      void target.offsetWidth; 
+      target.classList.add('page-enter');
+    }
+    
+    document.querySelectorAll('.nav-links button[data-page]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.page === name);
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(initScrollAnimations, 50);
+  }
+
+  window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if(navbar) {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }
+  });
+
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    
+    document.querySelectorAll('.product-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = show ? 'block' : 'none';
+    });
+  }
+
+  function handleContactSubmit(btn) {
+    if(!btn) return;
+    btn.textContent = '✓ Message Sent!';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initScrollAnimations();
+  });
+</script>
+</body>
+</html>
