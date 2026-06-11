@@ -6,7 +6,7 @@ body { background: #0a1410; }
 .page-background {
   background-image:
     linear-gradient(180deg, rgba(8,22,16,0.55), rgba(5,15,12,0.72)),
-    url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?auto=format&fit=crop&w=1920&q=80') !important;
+    url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') !important;
   background-size: cover !important;
   background-position: center top !important;
   background-attachment: fixed !important;
@@ -275,7 +275,7 @@ body { background: #0a1410; }
   background: #0a1310 !important;
   background-image:
     linear-gradient(180deg, rgba(10,20,15,0.88), rgba(5,12,9,0.95)),
-    url('https://images.unsplash.com/photo-1556909114-44e3e70034e2?auto=format&fit=crop&w=1920&q=80') !important;
+    url('https://thumbs.dreamstime.com/b/sunset-over-farm-realistic-cinematic-light-sharp-focus-pic-380871977.jpg') !important;
   background-size: cover !important;
   background-position: center !important;
   overflow: hidden !important;
