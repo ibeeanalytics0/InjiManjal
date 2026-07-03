@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard — InjiManjal Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar" id="topbar"></div>
+  <div class="container">
+    <h2>Dashboard</h2>
+    <div class="stats-grid" id="stats">
+      <div class="stat"><div class="label">Loading...</div></div>
+    </div>
+    <div class="card">
+      <h3>Low Stock Products (&lt; 10 units)</h3>
+      <table id="lowStockTable">
+        <thead><tr><th>Product</th><th>Stock</th></tr></thead>
+        <tbody><tr><td colspan="2" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    renderTopbar('dashboard.html');
+
+    (async () => {
+      const res = await adminFetch('/api/x/dashboard/stats');
+      if (!res) return;
+      const data = await res.json();
+
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="label">Total Customers</div><div class="value">${data.customers}</div></div>
+        <div class="stat"><div class="label">Total Orders</div><div class="value">${data.orders}</div></div>
+        <div class="stat"><div class="label">Revenue</div><div class="value">₹${data.revenue}</div></div>
+        <div class="stat"><div class="label">Low Stock Items</div><div class="value">${data.low_stock_products.length}</div></div>
+      `;
+
+      const tbody = document.querySelector('#lowStockTable tbody');
+      if (data.low_stock_products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="empty">All products well stocked ✅</td></tr>';
+      } else {
+        tbody.innerHTML = data.low_stock_products
+          .map(p => `<tr><td>${p.name}</td><td>${p.stock}</td></tr>`)
+          .join('');
+      }
+    })();
+  </script>
+</body>
+</html>

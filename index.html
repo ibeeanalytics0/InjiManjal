@@ -3,9 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>InjiManjal – Organic Food. At the Price it Should Always Be.</title>
+  <meta name="title" content="InjiManjal – Organic Food. At the Price it Should Always Be.">
+  <meta name="description" content="Project 331: Sourcing pesticide-free, non-GMO, and indigenous heritage foods directly from Tamil Nadu farms. Clean eating, honest pricing, zero middlemen markup.">
+  <meta name="keywords" content="injimanjal, inji manjal, project 331, organic food tamil nadu, black kavuni rice, seeraga samba, wild forest honey, native organic grocery, healthy food honest price">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.injimanjal.com/">
+  <meta property="og:title" content="InjiManjal – Organic Food. At the Price it Should Always Be.">
+  <meta property="og:description" content="Project 331: Pesticide-free, non-GMO, and indigenous heritage food directly from Tamil soil. Sourced fairly, priced honestly.">
+  <meta property="og:image" content="https://i.postimg.cc/7LFr3pbh/logo-Inji-Manjal.png">
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <meta name="author" content="InjiManjal Organic Products">
+  <link rel="canonical" href="https://www.injimanjal.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="InjiManjal – Organic Food. At the Price it Should Always Be.">
+  <meta name="twitter:description" content="Project 331: Pesticide-free, non-GMO indigenous food directly from Tamil Nadu farms.">
+  <meta name="twitter:image" content="https://i.postimg.cc/7LFr3pbh/logo-Inji-Manjal.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "InjiManjal",
+    "alternateName": "Project 331",
+    "url": "https://www.injimanjal.com",
+    "logo": "https://i.postimg.cc/7LFr3pbh/logo-Inji-Manjal.png",
+    "description": "Pesticide-free, non-GMO indigenous organic food sourced directly from Tamil Nadu farms at honest prices.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-7358387306",
+      "contactType": "customer service"
+    },
+    "sameAs": [],
+    "areaServed": "IN"
+  }
+  </script>
 </head>
 <body>
   <div class="fixed inset-0 z-0 bg-cover bg-center scale-105 page-background"></div>
@@ -31,21 +67,26 @@
         <img src="https://i.postimg.cc/7LFr3pbh/logo-Inji-Manjal.png" alt="InjiManjal Logo">
         <span class="nav-logo-text"><span class="logo-inji">Inji</span><span class="logo-manjal">Manjal</span></span>
       </div>
-      <button id="mobile-menu-button" type="button" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()" class="md:hidden inline-flex items-center justify-center p-2 rounded-full border border-white/10 bg-slate-950/80 text-white transition hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 focus:ring-amber-300">
-        <span class="sr-only">Toggle navigation</span>
-        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 8h16"></path>
-          <path d="M4 16h16"></path>
-        </svg>
-      </button>
-      <ul id="mobile-menu" class="nav-links hidden absolute top-full right-4 left-4 mt-2 rounded-3xl bg-slate-950/95 border border-white/10 backdrop-blur-lg p-4 flex-col gap-2 z-50 md:static md:top-auto md:right-auto md:left-auto md:mt-0 md:flex md:flex-row md:bg-transparent md:border-0 md:backdrop-blur-none md:p-0 md:gap-0 md:z-auto">
-        <li><button class="active" data-page="home" onclick="showPage('home')">Home</button></li>
-        <li><button data-page="about" onclick="showPage('about')">About</button></li>
-        <li><button data-page="products" onclick="showPage('products')">Products</button></li>
-        <li><button data-page="pricing" onclick="showPage('pricing')">Price Truth</button></li>
-        <li><button data-page="contact" onclick="showPage('contact')">Contact</button></li>
-        <li><button class="nav-cta" onclick="showPage('products')">Shop Now →</button></li>
-      </ul>
+      
+      <div class="flex items-center gap-4">
+        <ul id="mobile-menu" class="nav-links hidden absolute top-full right-4 left-4 mt-2 rounded-3xl bg-slate-950/95 border border-white/10 backdrop-blur-lg p-4 flex-col gap-2 z-50 md:static md:top-auto md:right-auto md:left-auto md:mt-0 md:flex md:flex-row md:bg-transparent md:border-0 md:backdrop-blur-none md:p-0 md:gap-2">
+          <li><button class="active" data-page="home" onclick="showPage('home')">Home</button></li>
+          <li><button data-page="about" onclick="showPage('about')">About</button></li>
+          <li><button data-page="products" onclick="showPage('products')">Products</button></li>
+          <li><button data-page="pricing" onclick="showPage('pricing')">Price Truth</button></li>
+          <li><button data-page="contact" onclick="showPage('contact')">Contact</button></li>
+          <li><button class="nav-cta text-center justify-center flex items-center" onclick="showPage('products')">Shop Now →</button></li>
+          <li><button id="navAuthBtn" class="nav-auth flex items-center justify-center text-center font-medium border border-white/20 px-4 py-2 rounded-full transition text-xs tracking-wider text-white bg-white/5" onclick="openAuthModal()">Sign In</button></li>
+        </ul>
+        
+        <button id="mobile-menu-button" type="button" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()" class="md:hidden inline-flex items-center justify-center p-2 rounded-full border border-white/10 bg-slate-950/80 text-white transition hover:bg-slate-900 focus:outline-none">
+          <span class="sr-only">Toggle navigation</span>
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 8h16"></path>
+            <path d="M4 16h16"></path>
+          </svg>
+        </button>
+      </div>
     </nav>
 
     <div id="page-home" class="page active">
@@ -59,8 +100,8 @@
             <h1>Organic Food.<br><em>At the Price it<br>Should Always Be.</em></h1>
             <p>Pesticide-free, non-GMO, and indigenous food sourced straight from Tamil soil — delivered directly to your door, cutting out every middleman.</p>
             <div class="hero-btns flex gap-4">
-              <button class="btn-primary" onclick="showPage('products')">Explore Products →</button>
-              <button class="btn-outline" onclick="showPage('about')">Our Story</button>
+              <button class="btn-primary text-center justify-center flex items-center" onclick="showPage('products')">Explore Products →</button>
+              <button class="btn-outline text-center justify-center flex items-center" onclick="showPage('about')">Our Story</button>
             </div>
             <div class="hero-stats">
               <div class="hero-stat">
@@ -180,7 +221,7 @@
             <br>
             <p class="about-highlight-text">By buying direct from the source, we protect farmers from market pressure, preserve indigenous crop varieties that are disappearing, and pass the savings on to every family that deserves access to clean food.</p>
             <br>
-            <button class="btn-primary mt-4" onclick="showPage('about')">Read Our Full Story →</button>
+            <button class="btn-primary mt-4 text-center justify-center flex items-center" onclick="showPage('about')">Read Our Full Story →</button>
           </div>
         </div>
       </section>
@@ -242,8 +283,8 @@
         <div class="max-w-2xl mx-auto space-y-4">
           <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl text-white font-semibold leading-tight">Taste the Difference. Feel the Difference.</h2>
           <p class="text-xs sm:text-sm text-white/70 max-w-lg mx-auto leading-relaxed">Explore pesticide-free, authentic native foods originating straight from Tamil Nadu ecosystems — configured for absolute affordability.</p>
-          <div class="pt-4">
-            <button class="btn-dark shadow-xl" onclick="showPage('products')">Browse All Products →</button>
+          <div class="pt-4 flex justify-center">
+            <button class="btn-dark shadow-xl text-center justify-center flex items-center" onclick="showPage('products')">Browse All Products →</button>
           </div>
         </div>
       </div>
@@ -323,102 +364,12 @@
           <button class="filter-btn active" onclick="filterProducts('all', this)">All Products</button>
           <button class="filter-btn" onclick="filterProducts('rice', this)">Heritage Rice</button>
           <button class="filter-btn" onclick="filterProducts('wellness', this)">Herbal Wellness</button>
-          <button class="filter-btn" onclick="filterProducts('tea', this)">Teas</button>
-          <button class="filter-btn" onclick="filterProducts('soup', this)">Soups & Porridges</button>
+          <button class="filter-btn" onclick="filterProducts('vadam', this)">Traditional Vadam</button>
+          <button class="filter-btn" onclick="filterProducts('podi', this)">Authentic Podi</button>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="products-grid">
-          <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="rice">
-            <div class="h-44 bg-gradient-to-br from-emerald-950 to-amber-950 flex items-center justify-center text-4xl relative">
-              🌾<div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Heritage</div>
-            </div>
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">Heritage Rice</div>
-                <h3 class="font-serif text-lg text-white font-medium leading-tight">Black Kavuni Rice</h3>
-                <div class="flex gap-1.5 pt-1"><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Non-GMO</span><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Chemical-Free</span></div>
-              </div>
-              <div class="flex items-center justify-between pt-2">
-                <span class="text-white font-serif text-base font-bold">$5.49 <small class="text-[10px] text-white/50 font-sans font-normal">/ kg</small></span>
-                <span class="text-xs text-white/40 line-through">$8.99</span>
-                <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save 39%</span>
-              </div>
-            </div>
           </div>
-
-          <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="rice">
-            <div class="h-44 bg-gradient-to-br from-emerald-900 to-teal-800 flex items-center justify-center text-4xl relative">
-              🌾<div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Heritage</div>
-            </div>
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">Heritage Rice</div>
-                <h3 class="font-serif text-lg text-white font-medium leading-tight">Seeraga Samba Rice</h3>
-                <div class="flex gap-1.5 pt-1"><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Native Seed</span><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">High Aroma</span></div>
-              </div>
-              <div class="flex items-center justify-between pt-2">
-                <span class="text-white font-serif text-base font-bold">$5.99 <small class="text-[10px] text-white/50 font-sans font-normal">/ kg</small></span>
-                <span class="text-xs text-white/40 line-through">$9.49</span>
-                <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save 37%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="wellness">
-            <div class="h-44 bg-gradient-to-br from-emerald-950 to-stone-900 flex items-center justify-center text-4xl relative">
-              🍯<div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Raw</div>
-            </div>
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">Herbal Wellness</div>
-                <h3 class="font-serif text-lg text-white font-medium leading-tight">Pure Wild Forest Honey</h3>
-                <div class="flex gap-1.5 pt-1"><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Raw</span><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Unfiltered</span></div>
-              </div>
-              <div class="flex items-center justify-between pt-2">
-                <span class="text-white font-serif text-base font-bold">$7.99 <small class="text-[10px] text-white/50 font-sans font-normal">/ 250g</small></span>
-                <span class="text-xs text-white/40 line-through">$12.99</span>
-                <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save 38%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="tea">
-            <div class="h-44 bg-gradient-to-br from-teal-950 to-stone-800 flex items-center justify-center text-4xl relative">
-              🫖<div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Organic</div>
-            </div>
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">Teas</div>
-                <h3 class="font-serif text-lg text-white font-medium leading-tight">Lemon Butterfly Pea Tea</h3>
-                <div class="flex gap-1.5 pt-1"><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Caffeine Free</span><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Pure Petals</span></div>
-              </div>
-              <div class="flex items-center justify-between pt-2">
-                <span class="text-white font-serif text-base font-bold">$4.49 <small class="text-[10px] text-white/50 font-sans font-normal">/ 30 bags</small></span>
-                <span class="text-xs text-white/40 line-through">$7.49</span>
-                <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save 40%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="soup">
-            <div class="h-44 bg-gradient-to-br from-stone-900 to-emerald-950 flex items-center justify-center text-4xl relative">
-              🥣<div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Traditional</div>
-            </div>
-            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-              <div class="space-y-1">
-                <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">Soups & Porridges</div>
-                <h3 class="font-serif text-lg text-white font-medium leading-tight">Moringa Leaf Soup Mix</h3>
-                <div class="flex gap-1.5 pt-1"><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">Iron Rich</span><span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">No MSG</span></div>
-              </div>
-              <div class="flex items-center justify-between pt-2">
-                <span class="text-white font-serif text-base font-bold">$3.99 <small class="text-[10px] text-white/50 font-sans font-normal">/ 100g</small></span>
-                <span class="text-xs text-white/40 line-through">$6.49</span>
-                <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save 38%</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
       </div>
     </div>
 
@@ -438,17 +389,7 @@
               <span>InjiManjal</span>
               <span>You Save</span>
             </div>
-            <div class="pricing-row">
-              <div class="pricing-product"><span class="p-ico">🌾</span><div class="p-details"><strong>Heritage Black Rice</strong><span>1 kg · Non-GMO</span></div></div>
-              <span class="store-price">$8.99</span>
-              <span class="im-price">$5.49</span>
-              <span class="savings-badge">Save 39%</span>
-            </div>
-            <div class="pricing-row">
-              <div class="pricing-product"><span class="p-ico">🍯</span><div class="p-details"><strong>Wild Forest Honey</strong><span>250g · Raw</span></div></div>
-              <span class="store-price">$12.99</span>
-              <span class="im-price">$7.99</span>
-              <span class="savings-badge">Save 38%</span>
+            <div id="pricing-table-rows">
             </div>
           </div>
 
@@ -498,22 +439,24 @@
             <div class="form-row">
               <div class="form-group">
                 <label>First Name</label>
-                <input type="text" placeholder="Aarav">
+                <input type="text" id="contact-fname" placeholder="Aarav">
               </div>
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" placeholder="Kumar">
+                <input type="text" id="contact-lname" placeholder="Kumar">
               </div>
             </div>
             <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="you@example.com">
+              <div class="email-address">Email Address</div>
+              <input type="email" id="contact-email" placeholder="you@example.com">
             </div>
             <div class="form-group">
               <label>Message</label>
-              <textarea rows="4" placeholder="Tell us what's on your mind..."></textarea>
+              <textarea id="contact-message" rows="4" placeholder="Tell us what's on your mind..."></textarea>
             </div>
-            <button class="btn-primary btn-full" onclick="handleContactSubmit(this)">Send Message →</button>
+            <div class="flex justify-center">
+              <button class="btn-primary btn-full text-center justify-center flex items-center" onclick="handleContactSubmit(this)">Send Message →</button>
+            </div>
           </div>
         </div>
       </div>
@@ -558,6 +501,37 @@
     </footer>
   </div>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+  <div id="authModalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9000; justify-content:center; align-items:center;">
+    <div style="background:rgba(10,20,14,0.55); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid rgba(212,163,57,0.2); border-radius:1.5rem; width:100%; max-width:420px; margin:1rem; padding:2.5rem; position:relative; box-shadow:0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);">
+      <button onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1.25rem; background:none; border:none; color:#9ca3af; font-size:1.4rem; line-height:1; cursor:pointer;">&times;</button>
+      <h2 id="authModalTitle" style="font-family:'Playfair Display',serif; font-size:1.75rem; color:#f5f0e8; margin-bottom:0.4rem; text-align:center;">Welcome Back</h2>
+      <p id="authModalSubtitle" style="font-size:0.83rem; color:#6b7280; text-align:center; margin-bottom:1.75rem;">Sign in to your InjiManjal account</p>
+      <div style="display:flex; margin-bottom:1.75rem; background:rgba(255,255,255,0.05); border-radius:0.65rem; padding:0.25rem;">
+        <button id="tabLogin" onclick="toggleAuthModal(true)" style="flex:1; padding:0.55rem; border-radius:0.5rem; border:none; font-size:0.85rem; font-weight:600; background:#d4a339; color:#0f1a12; transition:all 0.2s; font-family:inherit; cursor:pointer;">Sign In</button>
+        <button id="tabRegister" onclick="toggleAuthModal(false)" style="flex:1; padding:0.55rem; border-radius:0.5rem; border:none; font-size:0.85rem; font-weight:600; background:transparent; color:#9ca3af; transition:all 0.2s; font-family:inherit; cursor:pointer;">Create Account</button>
+      </div>
+      <div id="authNameRow" style="display:none; margin-bottom:1rem;">
+        <label style="display:block; font-size:0.75rem; font-weight:700; color:#9ca3af; margin-bottom:0.4rem; letter-spacing:0.06em;">FULL NAME</label>
+        <input type="text" id="authName" placeholder="Your name" style="width:100%; padding:0.75rem 1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:0.6rem; color:#f5f0e8; font-size:0.9rem; outline:none; font-family:inherit;">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block; font-size:0.75rem; font-weight:700; color:#9ca3af; margin-bottom:0.4rem; letter-spacing:0.06em;">EMAIL ADDRESS</label>
+        <input type="email" id="authEmail" placeholder="you@email.com" style="width:100%; padding:0.75rem 1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:0.6rem; color:#f5f0e8; font-size:0.9rem; outline:none; font-family:inherit;">
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:block; font-size:0.75rem; font-weight:700; color:#9ca3af; margin-bottom:0.4rem; letter-spacing:0.06em;">PASSWORD</label>
+        <input type="password" id="authPassword" placeholder="Min. 8 characters" style="width:100%; padding:0.75rem 1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:0.6rem; color:#f5f0e8; font-size:0.9rem; outline:none; font-family:inherit;">
+      </div>
+      <p id="authError" style="display:none; color:#f87171; font-size:0.82rem; margin-bottom:1rem; text-align:center;"></p>
+      <button id="authSubmitBtn" onclick="handleAuthRequest()" style="width:100%; padding:0.9rem; background:linear-gradient(135deg,#d4a339,#b8862a); color:#0f1a12; border:none; border-radius:0.65rem; font-size:0.95rem; font-weight:700; font-family:inherit; cursor:pointer; box-shadow:0 4px 20px rgba(212,163,57,0.35);">Sign In</button>
+      <p style="text-align:center; margin-top:1.25rem; font-size:0.82rem; color:#6b7280;">
+        <span id="authSwitchText">Don't have an account?</span>
+        <button id="authSwitchBtn" onclick="toggleAuthModal(!isLoginMode)" style="background:none; border:none; color:#d4a339; font-weight:600; font-size:0.82rem; cursor:pointer; margin-left:0.3rem;">Create one</button>
+      </p>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

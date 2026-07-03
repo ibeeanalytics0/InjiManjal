@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Settings — InjiManjal Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar" id="topbar"></div>
+  <div class="container">
+    <h2>Settings</h2>
+    <div class="card">
+      <form id="settingsForm">
+        <label>Free shipping threshold (₹)</label><br>
+        <input type="number" id="free_shipping_threshold" step="0.01"><br><br>
+        <label>Shipping cost (₹)</label><br>
+        <input type="number" id="shipping_cost" step="0.01"><br><br>
+        <label>Tax percent (%)</label><br>
+        <input type="number" id="tax_percent" step="0.01"><br><br>
+        <button type="submit">Save Settings</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Recent Activity</h3>
+      <table>
+        <thead><tr><th>Admin</th><th>Action</th><th>Target</th><th>When</th></tr></thead>
+        <tbody id="logsBody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    renderTopbar('settings.html');
+
+    async function loadSettings() {
+      const res = await adminFetch('/api/x/settings');
+      if (!res) return;
+      const { settings } = await res.json();
+      document.getElementById('free_shipping_threshold').value = settings.free_shipping_threshold || '';
+      document.getElementById('shipping_cost').value = settings.shipping_cost || '';
+      document.getElementById('tax_percent').value = settings.tax_percent || '';
+    }
+
+    async function loadLogs() {
+      const res = await adminFetch('/api/x/logs');
+      if (!res) return;
+      const { logs } = await res.json();
+      const tbody = document.getElementById('logsBody');
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">No activity yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td>${l.admins?.username || '—'}</td>
+          <td>${l.action}</td>
+          <td>${l.target || '—'}</td>
+          <td>${new Date(l.created_at).toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = {
+        free_shipping_threshold: parseFloat(document.getElementById('free_shipping_threshold').value),
+        shipping_cost: parseFloat(document.getElementById('shipping_cost').value),
+        tax_percent: parseFloat(document.getElementById('tax_percent').value),
+      };
+      const res = await adminFetch('/api/x/settings', { method: 'PUT', body: JSON.stringify(body) });
+      if (res && res.ok) {
+        alert('Settings saved');
+        loadLogs();
+      }
+    });
+
+    loadSettings();
+    loadLogs();
+  </script>
+</body>
+</html>
