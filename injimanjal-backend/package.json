@@ -1,0 +1,19 @@
+{
+  "name": "injimanjal-backend",
+  "version": "1.0.0",
+  "description": "InjiManjal e-commerce backend (Vercel serverless)",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "razorpay": "^2.9.4",
+    "resend": "^4.0.0",
+    "zod": "^3.23.8"
+  }
+}

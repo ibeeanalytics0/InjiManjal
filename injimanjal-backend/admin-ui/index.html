@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>InjiManjal Admin</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f4f1ea; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .box { background: #fff; padding: 2.5rem; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 320px; }
+  h1 { font-size: 1.3rem; margin-bottom: 1.5rem; color: #3d3423; }
+  label { display: block; font-size: 0.85rem; margin-bottom: 0.3rem; color: #555; }
+  input { width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+  button { width: 100%; padding: 0.7rem; background: #6b7a3f; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .error { color: #b3261e; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>🌿 InjiManjal Admin</h1>
+    <div class="error" id="error"></div>
+    <form id="loginForm">
+      <label>Username</label>
+      <input type="text" id="username" required autocomplete="username">
+      <label>Password</label>
+      <input type="password" id="password" required autocomplete="current-password">
+      <button type="submit" id="submitBtn">Log In</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorBox = document.getElementById('error');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+
+      try {
+        const res = await fetch('/api/x/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Log In';
+      }
+    });
+  </script>
+</body>
+</html>
