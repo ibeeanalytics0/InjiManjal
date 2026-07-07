@@ -8,8 +8,8 @@
  */
 const attempts = new Map();
 
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const MAX_ATTEMPTS = 5;
+const WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000; // 15 minutes default
+const MAX_ATTEMPTS = Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 5;
 
 function rateLimit(keyPrefix) {
   return (handler) => async (req, res) => {
