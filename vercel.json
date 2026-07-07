@@ -1,11 +1,37 @@
 {
   "version": 2,
+  "cleanUrls": true,
   "functions": {
     "api/**/*.js": {
       "memory": 256,
       "maxDuration": 10
     }
   },
+  "rewrites": [
+    { "source": "/api/shop/auth/:subpath*", "destination": "/api/shop/auth" },
+    { "source": "/api/x/auth/:subpath*", "destination": "/api/x/auth" },
+    { "source": "/api/shop/products", "destination": "/api/shop/products" },
+    { "source": "/api/shop/products/:slug", "destination": "/api/shop/products" },
+    { "source": "/api/shop/orders/create", "destination": "/api/shop/orders" },
+    { "source": "/api/shop/orders/my", "destination": "/api/shop/orders" },
+    { "source": "/api/shop/addresses/create", "destination": "/api/shop" },
+    { "source": "/api/shop/cart/validate", "destination": "/api/shop" },
+    { "source": "/api/shop/coupons/apply", "destination": "/api/shop" },
+    { "source": "/api/shop/payment/verify", "destination": "/api/shop" },
+    { "source": "/api/x/settings", "destination": "/api/x/products" },
+    { "source": "/api/x/products", "destination": "/api/x/products" },
+    { "source": "/api/x/products/:id", "destination": "/api/x/products" },
+    { "source": "/api/x/coupons", "destination": "/api/x" },
+    { "source": "/api/x/coupons/:id", "destination": "/api/x" },
+    { "source": "/api/x/customers", "destination": "/api/x" },
+    { "source": "/api/x/customers/:id", "destination": "/api/x" },
+    { "source": "/api/x/logs", "destination": "/api/x" },
+    { "source": "/api/x/orders", "destination": "/api/x" },
+    { "source": "/api/x/orders/:id", "destination": "/api/x" },
+    { "source": "/api/x/orders/:id/status", "destination": "/api/x" },
+    { "source": "/api/x/orders/:id/tracking", "destination": "/api/x" },
+    { "source": "/api/x/dashboard/stats", "destination": "/api/x" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
