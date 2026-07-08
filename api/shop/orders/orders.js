@@ -1,9 +1,12 @@
 const { z } = require('zod');
-const { supabase } = require('../../../lib/supabase');
-const { razorpay } = require('../../../lib/razorpay');
-const { customerAuth } = require('../../../middleware/customerAuth');
-const { applySecurityHeaders, handlePreflight, zodError } = require('../../../lib/http');
+const { supabase } = require('../../lib/supabase');
+const { razorpay } = require('../../lib/razorpay');
+const { customerAuth } = require('../../middleware/customerAuth');
+const { applySecurityHeaders, handlePreflight, zodError } = require('../../lib/http');
 
+// ==========================================
+// CONFIG & SCHEMA FROM create.js
+// ==========================================
 const schema = z.object({
   address_id: z.number().int(),
   items: z.array(z.object({
@@ -18,16 +21,15 @@ async function getSetting(key, fallback) {
   return data ? Number(data.value) : fallback;
 }
 
-async function handler(req, res) {
-  applySecurityHeaders(req, res);
-  if (handlePreflight(req, res)) return;
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
+// ==========================================
+// 1. LOGIC FROM create.js (POST)
+// ==========================================
+async function handleCreateOrder(req, res) {
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return zodError(res, parsed.error);
   const { address_id, items, coupon_code } = parsed.data;
 
-  // 1. Re-validate stock & pricing server-side (never trust frontend prices)
+  // Re-validate stock & pricing server-side
   const ids = items.map(i => i.product_id);
   const { data: products } = await supabase
     .from('products')
@@ -52,7 +54,7 @@ async function handler(req, res) {
 
   const subtotal = lineItems.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
 
-  // 2. Apply coupon if provided
+  // Apply coupon if provided
   let discount = 0;
   if (coupon_code) {
     const { data: coupon } = await supabase
@@ -77,7 +79,7 @@ async function handler(req, res) {
       : coupon.discount_value;
   }
 
-  // 3. Shipping + tax from settings
+  // Shipping + tax from settings
   const freeShippingThreshold = await getSetting('free_shipping_threshold', 499);
   const shippingCostSetting = await getSetting('shipping_cost', 49);
   const taxPercent = await getSetting('tax_percent', 0);
@@ -87,7 +89,7 @@ async function handler(req, res) {
   const tax = (afterDiscount * taxPercent) / 100;
   const total = Math.round((afterDiscount + shipping_cost + tax) * 100) / 100;
 
-  // 4. Create order row (PENDING)
+  // Create order row (PENDING)
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert({
@@ -110,7 +112,7 @@ async function handler(req, res) {
     return res.status(500).json({ error: 'Could not create order' });
   }
 
-  // 5. Insert order items
+  // Insert order items
   const itemsPayload = lineItems.map(i => ({ ...i, order_id: order.id }));
   const { error: itemsError } = await supabase.from('order_items').insert(itemsPayload);
   if (itemsError) {
@@ -118,7 +120,7 @@ async function handler(req, res) {
     return res.status(500).json({ error: 'Could not save order items' });
   }
 
-  // 6. Create Razorpay order (amount in paise)
+  // Create Razorpay order (amount in paise)
   const razorpayOrder = await razorpay.orders.create({
     amount: Math.round(total * 100),
     currency: 'INR',
@@ -134,6 +136,42 @@ async function handler(req, res) {
     currency: razorpayOrder.currency,
     key_id: process.env.RAZORPAY_KEY_ID,
   });
+}
+
+// ==========================================
+// 2. LOGIC FROM my.js (GET)
+// ==========================================
+async function handleGetMyOrders(req, res) {
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('id, status, payment_status, subtotal, discount, shipping_cost, tax, total, tracking_number, created_at, order_items(product_name, quantity, unit_price)')
+    .eq('customer_id', req.customer.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Could not load orders' });
+  }
+
+  return res.status(200).json({ orders });
+}
+
+// ==========================================
+// MAIN ROUTER GATEWAY
+// ==========================================
+async function handler(req, res) {
+  applySecurityHeaders(req, res);
+  if (handlePreflight(req, res)) return;
+
+  if (req.method === 'POST') {
+    return await handleCreateOrder(req, res);
+  }
+  
+  if (req.method === 'GET') {
+    return await handleGetMyOrders(req, res);
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
 }
 
 module.exports = customerAuth(handler);
