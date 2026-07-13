@@ -1,8 +1,8 @@
 const { z } = require('zod');
-const { supabase } = require('../../lib/supabase');
-const { razorpay } = require('../../lib/razorpay');
-const { customerAuth } = require('../../middleware/customerAuth');
-const { applySecurityHeaders, handlePreflight, zodError } = require('../../lib/http');
+const { supabase } = require('../../../lib/supabase');
+const { razorpay } = require('../../../lib/razorpay');
+const { customerAuth } = require('../../../middleware/customerAuth');
+const { applySecurityHeaders, handlePreflight, zodError } = require('../../../lib/http');
 
 // ==========================================
 // CONFIG & SCHEMA FROM create.js

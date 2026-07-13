@@ -1,5 +1,5 @@
-const { supabase } = require('../../lib/supabase');
-const { applySecurityHeaders, handlePreflight } = require('../../lib/http');
+const { supabase } = require('../../../lib/supabase');
+const { applySecurityHeaders, handlePreflight } = require('../../../lib/http');
 
 // ==========================================
 // 1. LOGIC FROM index.js (List or Filter Products)

@@ -8,12 +8,12 @@
     }
   },
   "rewrites": [
-    { "source": "/api/shop/auth/:subpath*", "destination": "/api/shop/auth" },
-    { "source": "/api/x/auth/:subpath*", "destination": "/api/x/auth" },
-    { "source": "/api/shop/products", "destination": "/api/shop/products" },
-    { "source": "/api/shop/products/:slug", "destination": "/api/shop/products" },
-    { "source": "/api/shop/orders/create", "destination": "/api/shop/orders" },
-    { "source": "/api/shop/orders/my", "destination": "/api/shop/orders" },
+    { "source": "/api/shop/auth/:subpath*", "destination": "/api/shop/auth/auth" },
+    { "source": "/api/x/auth/:subpath*", "destination": "/api/x/auth/auth" },
+    { "source": "/api/shop/products", "destination": "/api/shop/products/products" },
+    { "source": "/api/shop/products/:slug", "destination": "/api/shop/products/products" },
+    { "source": "/api/shop/orders/create", "destination": "/api/shop/orders/orders" },
+    { "source": "/api/shop/orders/my", "destination": "/api/shop/orders/orders" },
     { "source": "/api/shop/addresses/create", "destination": "/api/shop" },
     { "source": "/api/shop/cart/validate", "destination": "/api/shop" },
     { "source": "/api/shop/coupons/apply", "destination": "/api/shop" },
