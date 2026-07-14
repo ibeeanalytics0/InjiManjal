@@ -208,7 +208,7 @@ async function handler(req, res) {
   // ----------------------------------------
   if (pathParts.includes('orders')) {
     if (pathParts.length > 4) {
-      const id = pathParts[2]; 
+      const id = pathParts[3]; 
       const action = pathParts[4];
       if (req.method === 'PUT' && action === 'status') return await handleUpdateOrderStatus(req, res, id);
       if (req.method === 'PUT' && action === 'tracking') return await handleUpdateOrderTracking(req, res, id);

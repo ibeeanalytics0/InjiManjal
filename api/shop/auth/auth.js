@@ -1,6 +1,6 @@
-const bcrypt = require('../../lib/bcryptjs' ? 'bcryptjs' : 'bcryptjs'); // standard require
+const bcrypt = require('bcryptjs');
 const { z } = require('zod');
-const { supabase } = require('../../lib/supabase');
+const { supabase } = require('../../../lib/supabase');
 const { 
   signCustomerAccess, 
   signCustomerRefresh, 
@@ -8,9 +8,9 @@ const {
   clearAuthCookies, 
   verifyCustomerRefresh, 
   parseCookies 
-} = require('../../lib/jwt');
-const { rateLimit } = require('../../middleware/rateLimit');
-const { applySecurityHeaders, handlePreflight, zodError } = require('../../lib/http');
+} = require('../../../lib/jwt');
+const { rateLimit } = require('../../../middleware/rateLimit');
+const { applySecurityHeaders, handlePreflight, zodError } = require('../../../lib/http');
 
 // ==========================================
 // 1. LOGIC FROM register.js
