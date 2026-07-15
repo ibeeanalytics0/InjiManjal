@@ -8,8 +8,13 @@
     }
   },
   "rewrites": [
-    { "source": "/api/shop/auth/:subpath*", "destination": "/api/shop/auth/auth" },
-    { "source": "/api/x/auth/:subpath*", "destination": "/api/x/auth/auth" },
+    { "source": "/api/shop/auth/register", "destination": "/api/shop/auth/auth?action=register" },
+    { "source": "/api/shop/auth/login", "destination": "/api/shop/auth/auth?action=login" },
+    { "source": "/api/shop/auth/logout", "destination": "/api/shop/auth/auth?action=logout" },
+    { "source": "/api/shop/auth/refresh", "destination": "/api/shop/auth/auth?action=refresh" },
+    { "source": "/api/x/auth/login", "destination": "/api/x/auth/auth?action=login" },
+    { "source": "/api/x/auth/logout", "destination": "/api/x/auth/auth?action=logout" },
+    { "source": "/api/x/auth/refresh", "destination": "/api/x/auth/auth?action=refresh" },
     { "source": "/api/shop/products", "destination": "/api/shop/products/products" },
     { "source": "/api/shop/products/:slug", "destination": "/api/shop/products/products" },
     { "source": "/api/shop/orders/create", "destination": "/api/shop/orders/orders" },

@@ -140,22 +140,23 @@ module.exports = async (req, res) => {
   if (handlePreflight(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Read the URL to find out which endpoint the frontend wants
+  // Read the route action passed by Vercel rewrites, with URL fallback for local dev.
   const url = req.url || '';
+  const action = req.query?.action;
 
-  if (url.endsWith('/register')) {
+  if (action === 'register' || url.endsWith('/register')) {
     return await handleRegister(req, res);
   }
   
-  if (url.endsWith('/login')) {
+  if (action === 'login' || url.endsWith('/login')) {
     return await limitedLogin(req, res);
   }
   
-  if (url.endsWith('/logout')) {
+  if (action === 'logout' || url.endsWith('/logout')) {
     return await handleLogout(req, res);
   }
   
-  if (url.endsWith('/refresh')) {
+  if (action === 'refresh' || url.endsWith('/refresh')) {
     return await handleRefresh(req, res);
   }
 
