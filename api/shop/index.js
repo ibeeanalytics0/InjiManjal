@@ -125,7 +125,7 @@ async function handleApplyCoupon(req, res) {
     return res.status(400).json({ valid: false, error: `Minimum order of ₹${coupon.min_order} required` });
   }
 
-  const discount = coupon.type === 'percent' ? (subtotal * coupon.discount_value) / 100 : coupon.discount_value;
+  const discount = Math.min(subtotal, coupon.type === 'percent' ? (subtotal * coupon.discount_value) / 100 : coupon.discount_value);
   return res.status(200).json({ valid: true, discount: Math.round(discount * 100) / 100 });
 }
 
@@ -193,18 +193,19 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const url = req.url || '';
+  const action = req.query?.action;
 
-  // Forwarding destination checks
-  if (url.endsWith('/addresses/create')) {
+  // Read the route action passed by Vercel rewrites, with URL fallback for local dev.
+  if (action === 'create-address' || url.endsWith('/addresses/create')) {
     return customerAuth(handleCreateAddress)(req, res);
   }
-  if (url.endsWith('/cart/validate')) {
+  if (action === 'validate-cart' || url.endsWith('/cart/validate')) {
     return await handleValidateCart(req, res);
   }
-  if (url.endsWith('/coupons/apply')) {
+  if (action === 'apply-coupon' || url.endsWith('/coupons/apply')) {
     return await handleApplyCoupon(req, res);
   }
-  if (url.endsWith('/payment/verify')) {
+  if (action === 'verify-payment' || url.endsWith('/payment/verify')) {
     return customerAuth(handleVerifyPayment)(req, res);
   }
 

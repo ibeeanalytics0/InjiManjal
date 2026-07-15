@@ -3186,3 +3186,35 @@ canvas {
   outline: none !important;
   box-shadow: 0 0 0 3px rgba(212, 163, 57, 0.3) !important;
 }
+
+/* Customer account and delivery checkout panels */
+.account-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+.account-modal { position: relative; width: min(100%, 480px); max-height: min(720px, 90vh); overflow-y: auto; padding: 2rem; border: 1px solid rgba(212, 163, 57, 0.25); border-radius: 0.75rem; background: #0a140e; color: #f5f0e8; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55); }
+.account-modal-close { position: absolute; top: 0.85rem; right: 1rem; border: 0; background: transparent; color: #9ca3af; font-size: 1.5rem; cursor: pointer; }
+.account-kicker { margin: 0 0 0.4rem; color: #d4a339; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.account-modal h2 { margin: 0 0 1.4rem; color: #f5f0e8; font-family: 'Playfair Display', serif; font-size: 1.75rem; }
+.account-modal h3 { margin: 1.5rem 0 0.75rem; color: #f5f0e8; font-size: 0.95rem; }
+.account-details, .account-orders { display: grid; gap: 0.65rem; }
+.account-detail, .account-order { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 0.4rem; }
+.account-order { background: rgba(255,255,255,0.05); }
+.account-order div { display: grid; gap: 0.25rem; }
+.account-order div:last-child { text-align: right; }
+.account-detail span, .account-order span { color: #9ca3af; font-size: 0.8rem; }
+.account-detail strong { overflow-wrap: anywhere; text-align: right; }
+.account-empty, .account-error { margin: 0; color: #9ca3af; font-size: 0.85rem; }
+.account-error { color: #f87171; }
+.account-primary, .account-signout { width: 100%; margin-top: 1.25rem; padding: 0.8rem; border: 0; border-radius: 0.45rem; background: #d4a339; color: #0f1a12; font: inherit; font-weight: 700; cursor: pointer; }
+.account-signout { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #f5f0e8; }
+.checkout-product { margin: -0.8rem 0 1.25rem; color: #d4a339; font-size: 0.9rem; }
+.checkout-modal input { width: 100%; margin-bottom: 0.75rem; padding: 0.75rem; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.4rem; background: rgba(255,255,255,0.06); color: #f5f0e8; font: inherit; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+@media (max-width: 480px) { .account-modal { padding: 1.5rem; } .checkout-grid { grid-template-columns: 1fr; gap: 0; } }
