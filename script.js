@@ -47,6 +47,26 @@ const CATALOG = [
 
 let isLoginMode = true;
 let currentCustomer = null;
+let pendingCheckoutProductId = null;
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, character => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  }[character]));
+}
+
+async function fetchWithCustomerSession(url, options = {}, retry = true) {
+  const response = await fetch(url, { ...options, credentials: 'include' });
+  if (response.status !== 401 || !retry) return response;
+
+  const refresh = await fetch('/api/shop/auth/refresh', { method: 'POST', credentials: 'include' });
+  if (!refresh.ok) return response;
+  return fetchWithCustomerSession(url, options, false);
+}
 
 // Global Scoped Functions mapped to UI Buttons
 window.launchSite = function() {
@@ -105,7 +125,7 @@ function closeMobileMenu() {
 // ─── AUTH MODAL EXPORTS ───────────────────────────────────────────────────
 window.openAuthModal = function() {
   if (currentCustomer) {
-    if (confirm(`Logged in as ${currentCustomer.email}. Sign out?`)) handleLogout();
+    window.openProfileModal();
     return;
   }
   window.toggleAuthModal(true);
@@ -235,12 +255,69 @@ async function handleLogout() {
   }
 }
 
+window.openProfileModal = async function() {
+  if (!currentCustomer) return window.openAuthModal();
+
+  const overlay = document.getElementById('profileModalOverlay');
+  const details = document.getElementById('profileDetails');
+  const orders = document.getElementById('profileOrders');
+  if (!overlay || !details || !orders) return;
+
+  details.innerHTML = `
+    <div class="account-detail"><span>Name</span><strong>${escapeHtml(currentCustomer.name)}</strong></div>
+    <div class="account-detail"><span>Email</span><strong>${escapeHtml(currentCustomer.email)}</strong></div>`;
+  orders.textContent = 'Loading your orders...';
+  overlay.style.setProperty('display', 'flex', 'important');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const response = await fetchWithCustomerSession('/api/shop/orders/my');
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Could not load orders.');
+
+    if (!data.orders?.length) {
+      orders.innerHTML = '<p class="account-empty">No orders yet. Your completed orders will appear here.</p>';
+      return;
+    }
+
+    orders.innerHTML = data.orders.map(order => `
+      <article class="account-order">
+        <div><strong>Order #${escapeHtml(order.id)}</strong><span>${new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span></div>
+        <div><strong>₹${Number(order.total).toFixed(2)}</strong><span>${escapeHtml(order.status)}</span></div>
+      </article>`).join('');
+  } catch (error) {
+    orders.innerHTML = `<p class="account-error">${escapeHtml(error.message)}</p>`;
+  }
+};
+
+window.closeProfileModal = function() {
+  document.getElementById('profileModalOverlay')?.style.setProperty('display', 'none', 'important');
+  document.body.style.overflow = '';
+};
+
+window.signOutFromProfile = async function() {
+  await handleLogout();
+  window.closeProfileModal();
+};
+
 function updateNavForLoggedInUser() {
   const btn = document.getElementById('navAuthBtn');
   if (!btn) return;
   const firstName = currentCustomer?.name?.split(' ')[0] || 'Account';
   btn.textContent = `Hi, ${firstName} ▾`;
   btn.classList.add('logged-in');
+}
+
+async function restoreCustomerSession() {
+  try {
+    const response = await fetchWithCustomerSession('/api/shop/auth/me');
+    if (!response.ok) return;
+    const data = await response.json();
+    currentCustomer = data.customer;
+    updateNavForLoggedInUser();
+  } catch (error) {
+    // A missing or expired session simply leaves the visitor signed out.
+  }
 }
 
 // ─── HYDRATION FUNCTIONS ──────────────────────────────────────────────────
@@ -306,12 +383,69 @@ window.triggerCheckoutFlow = async function(productId) {
   const prod = CATALOG.find(p => p.id === productId);
   if (!prod) return;
 
+  pendingCheckoutProductId = productId;
+  window.openCheckoutAddressModal(prod);
+};
+
+window.openCheckoutAddressModal = function(product) {
+  const overlay = document.getElementById('checkoutModalOverlay');
+  const productName = document.getElementById('checkoutProductName');
+  const error = document.getElementById('checkoutError');
+  if (!overlay || !productName) return;
+  productName.textContent = `${product.name} - ₹${product.price}`;
+  if (error) error.style.display = 'none';
+  overlay.style.setProperty('display', 'flex', 'important');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeCheckoutAddressModal = function() {
+  document.getElementById('checkoutModalOverlay')?.style.setProperty('display', 'none', 'important');
+  document.body.style.overflow = '';
+};
+
+window.submitCheckoutAddress = async function() {
+  const product = CATALOG.find(p => p.id === pendingCheckoutProductId);
+  const error = document.getElementById('checkoutError');
+  const button = document.getElementById('checkoutSubmitBtn');
+  if (!product || !currentCustomer) return;
+
+  const address = {
+    label: document.getElementById('checkoutLabel')?.value.trim() || 'Home',
+    line1: document.getElementById('checkoutLine1')?.value.trim(),
+    line2: document.getElementById('checkoutLine2')?.value.trim() || undefined,
+    city: document.getElementById('checkoutCity')?.value.trim(),
+    state: document.getElementById('checkoutState')?.value.trim(),
+    pincode: document.getElementById('checkoutPincode')?.value.trim(),
+    phone: document.getElementById('checkoutPhone')?.value.trim(),
+    is_default: true,
+  };
+
+  if (!address.line1 || !address.city || !address.state || !address.pincode || !address.phone) {
+    if (error) {
+      error.textContent = 'Please complete all delivery address fields.';
+      error.style.display = 'block';
+    }
+    return;
+  }
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Preparing payment...';
+  }
+
   try {
-    const orderRes = await fetch('/api/shop/orders/create', {
+    const addressResponse = await fetchWithCustomerSession('/api/shop/addresses/create', {
       method: 'POST',
-      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ product_id: prod.id, quantity: 1 }] }),
+      body: JSON.stringify(address),
+    });
+    const addressData = await addressResponse.json();
+    if (!addressResponse.ok) throw new Error(addressData.error || 'Could not save delivery address.');
+
+    const orderRes = await fetchWithCustomerSession('/api/shop/orders/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address_id: addressData.address.id, items: [{ product_id: product.id, quantity: 1 }] }),
     });
     const orderData = await orderRes.json();
     if (!orderRes.ok) throw new Error(orderData.error || 'Order creation failed.');
@@ -321,15 +455,14 @@ window.triggerCheckoutFlow = async function(productId) {
       amount: orderData.amount,
       currency: 'INR',
       name: 'InjiManjal',
-      description: prod.name,
+      description: product.name,
       image: 'https://i.postimg.cc/7LFr3pbh/logo-Inji-Manjal.png',
       order_id: orderData.razorpay_order_id,
       prefill: { name: currentCustomer.name, email: currentCustomer.email },
       theme: { color: '#1e6e45' },
       handler: async function (response) {
-        const verifyRes = await fetch('/api/shop/payment/verify', {
+        const verifyRes = await fetchWithCustomerSession('/api/shop/payment/verify', {
           method: 'POST',
-          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             order_id:              orderData.order_id,
@@ -351,7 +484,15 @@ window.triggerCheckoutFlow = async function(productId) {
     rzp.on('payment.failed', function(resp) { alert('Payment failed: ' + resp.error.description); });
     rzp.open();
   } catch (err) {
-    alert('Error: ' + err.message);
+    if (error) {
+      error.textContent = err.message;
+      error.style.display = 'block';
+    }
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = 'Continue to Payment';
+    }
   }
 };
 
@@ -377,6 +518,7 @@ function initScrollAnimations() {
 window.addEventListener('DOMContentLoaded', () => {
   hydrateShopAndPricing();
   initScrollAnimations();
+  restoreCustomerSession();
   
   setTimeout(() => {
     const introScreen = document.getElementById('intro-screen');

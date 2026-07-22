@@ -193,3 +193,15 @@ create index idx_orders_customer on orders(customer_id);
 create index idx_orders_status on orders(status);
 create index idx_order_items_order on order_items(order_id);
 create index idx_addresses_customer on addresses(customer_id);
+
+-- The public Supabase API must not expose customer, order, or admin data.
+-- The Vercel backend uses the service-role key and continues to have access.
+alter table customers enable row level security;
+alter table addresses enable row level security;
+alter table products enable row level security;
+alter table coupons enable row level security;
+alter table orders enable row level security;
+alter table order_items enable row level security;
+alter table admins enable row level security;
+alter table settings enable row level security;
+alter table activity_log enable row level security;

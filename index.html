@@ -532,6 +532,40 @@
       </p>
     </div>
   </div>
+
+  <div id="profileModalOverlay" class="account-modal-overlay" style="display:none;" onclick="if (event.target === this) closeProfileModal()">
+    <section class="account-modal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+      <button class="account-modal-close" type="button" onclick="closeProfileModal()" aria-label="Close account">&times;</button>
+      <p class="account-kicker">My Account</p>
+      <h2 id="profileModalTitle">Profile &amp; Orders</h2>
+      <div id="profileDetails" class="account-details"></div>
+      <h3>Order History</h3>
+      <div id="profileOrders" class="account-orders"></div>
+      <button class="account-signout" type="button" onclick="signOutFromProfile()">Sign Out</button>
+    </section>
+  </div>
+
+  <div id="checkoutModalOverlay" class="account-modal-overlay" style="display:none;" onclick="if (event.target === this) closeCheckoutAddressModal()">
+    <section class="account-modal checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
+      <button class="account-modal-close" type="button" onclick="closeCheckoutAddressModal()" aria-label="Close checkout">&times;</button>
+      <p class="account-kicker">Secure Checkout</p>
+      <h2 id="checkoutModalTitle">Delivery Address</h2>
+      <p id="checkoutProductName" class="checkout-product"></p>
+      <div class="checkout-grid">
+        <input id="checkoutLabel" type="text" placeholder="Address label (Home)" value="Home">
+        <input id="checkoutPhone" type="tel" placeholder="Phone number" inputmode="numeric">
+      </div>
+      <input id="checkoutLine1" type="text" placeholder="House / street address">
+      <input id="checkoutLine2" type="text" placeholder="Apartment, area (optional)">
+      <div class="checkout-grid">
+        <input id="checkoutCity" type="text" placeholder="City">
+        <input id="checkoutState" type="text" placeholder="State">
+      </div>
+      <input id="checkoutPincode" type="text" placeholder="PIN code" inputmode="numeric">
+      <p id="checkoutError" class="account-error" style="display:none;"></p>
+      <button id="checkoutSubmitBtn" class="account-primary" type="button" onclick="submitCheckoutAddress()">Continue to Payment</button>
+    </section>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

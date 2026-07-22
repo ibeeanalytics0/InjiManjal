@@ -77,6 +77,7 @@ async function handleCreateOrder(req, res) {
     discount = coupon.type === 'percent'
       ? (subtotal * coupon.discount_value) / 100
       : coupon.discount_value;
+    discount = Math.min(subtotal, discount);
   }
 
   // Shipping + tax from settings

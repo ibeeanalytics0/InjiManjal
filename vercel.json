@@ -12,6 +12,7 @@
     { "source": "/api/shop/auth/login", "destination": "/api/shop/auth/auth?action=login" },
     { "source": "/api/shop/auth/logout", "destination": "/api/shop/auth/auth?action=logout" },
     { "source": "/api/shop/auth/refresh", "destination": "/api/shop/auth/auth?action=refresh" },
+    { "source": "/api/shop/auth/me", "destination": "/api/shop/auth/auth?action=me" },
     { "source": "/api/x/auth/login", "destination": "/api/x/auth/auth?action=login" },
     { "source": "/api/x/auth/logout", "destination": "/api/x/auth/auth?action=logout" },
     { "source": "/api/x/auth/refresh", "destination": "/api/x/auth/auth?action=refresh" },
@@ -19,10 +20,10 @@
     { "source": "/api/shop/products/:slug", "destination": "/api/shop/products/products" },
     { "source": "/api/shop/orders/create", "destination": "/api/shop/orders/orders" },
     { "source": "/api/shop/orders/my", "destination": "/api/shop/orders/orders" },
-    { "source": "/api/shop/addresses/create", "destination": "/api/shop" },
-    { "source": "/api/shop/cart/validate", "destination": "/api/shop" },
-    { "source": "/api/shop/coupons/apply", "destination": "/api/shop" },
-    { "source": "/api/shop/payment/verify", "destination": "/api/shop" },
+    { "source": "/api/shop/addresses/create", "destination": "/api/shop?action=create-address" },
+    { "source": "/api/shop/cart/validate", "destination": "/api/shop?action=validate-cart" },
+    { "source": "/api/shop/coupons/apply", "destination": "/api/shop?action=apply-coupon" },
+    { "source": "/api/shop/payment/verify", "destination": "/api/shop?action=verify-payment" },
     { "source": "/api/x/settings", "destination": "/api/x/products" },
     { "source": "/api/x/products", "destination": "/api/x/products" },
     { "source": "/api/x/products/:id", "destination": "/api/x/products" },
@@ -43,6 +44,8 @@
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
       ]
     }

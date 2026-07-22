@@ -10,6 +10,7 @@ const {
   parseCookies 
 } = require('../../../lib/jwt');
 const { rateLimit } = require('../../../middleware/rateLimit');
+const { customerAuth } = require('../../../middleware/customerAuth');
 const { applySecurityHeaders, handlePreflight, zodError } = require('../../../lib/http');
 
 // ==========================================
@@ -49,6 +50,17 @@ async function handleRegister(req, res) {
     console.error(error);
     return res.status(500).json({ error: 'Could not create account' });
   }
+
+  const payload = { id: customer.id, email: customer.email };
+  const accessToken = signCustomerAccess(payload);
+  const refreshToken = signCustomerRefresh(payload);
+
+  setAuthCookies(res, {
+    accessName: 'customer_access',
+    accessToken,
+    refreshName: 'customer_refresh',
+    refreshToken,
+  });
 
   return res.status(201).json({ customer });
 }
@@ -132,17 +144,32 @@ async function handleRefresh(req, res) {
   }
 }
 
+async function handleMe(req, res) {
+  const { data: customer, error } = await supabase
+    .from('customers')
+    .select('id, name, email')
+    .eq('id', req.customer.id)
+    .maybeSingle();
+
+  if (error || !customer) return res.status(404).json({ error: 'Customer not found' });
+  return res.status(200).json({ customer });
+}
+
 // ==========================================
 // MAIN ROUTER GATEWAY
 // ==========================================
 module.exports = async (req, res) => {
   applySecurityHeaders(req, res);
   if (handlePreflight(req, res)) return;
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Read the route action passed by Vercel rewrites, with URL fallback for local dev.
   const url = req.url || '';
   const action = req.query?.action;
+
+  if (req.method === 'GET' && (action === 'me' || url.endsWith('/me'))) {
+    return customerAuth(handleMe)(req, res);
+  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   if (action === 'register' || url.endsWith('/register')) {
     return await handleRegister(req, res);
