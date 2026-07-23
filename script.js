@@ -48,6 +48,7 @@ const CATALOG = [
 let isLoginMode = true;
 let currentCustomer = null;
 let pendingCheckoutProductId = null;
+let activeCatalog = CATALOG;
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, character => ({
@@ -321,12 +322,44 @@ async function restoreCustomerSession() {
 }
 
 // ─── HYDRATION FUNCTIONS ──────────────────────────────────────────────────
-function hydrateShopAndPricing() {
+async function loadLiveCatalog() {
+  try {
+    const response = await fetch('/api/shop/products');
+    if (!response.ok) return CATALOG;
+    const data = await response.json();
+    const liveProducts = Array.isArray(data.products) ? data.products : [];
+    if (!liveProducts.length) return CATALOG;
+
+    const liveBySlug = new Map(liveProducts.map(product => [product.slug, product]));
+    return CATALOG
+      .map(product => {
+        const live = liveBySlug.get(product.slug);
+        if (!live) return null;
+        const price = Number(live.sale_price || live.price);
+        return {
+          ...product,
+          id: live.id,
+          name: live.name || product.name,
+          category: live.category || product.category,
+          price,
+          marketPrice: Math.max(product.marketPrice, Number(live.price || price)),
+          stock: Number(live.stock || 0),
+        };
+      })
+      .filter(Boolean);
+  } catch (error) {
+    return CATALOG;
+  }
+}
+
+async function hydrateShopAndPricing() {
+  activeCatalog = await loadLiveCatalog();
+
   const grid = document.getElementById('products-grid');
   const tableBody = document.getElementById('pricing-table-rows');
 
   if (grid) {
-    grid.innerHTML = CATALOG.map(prod => {
+    grid.innerHTML = activeCatalog.map(prod => {
       const savePercent = Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100);
       return `
         <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="${prod.category}">
@@ -356,7 +389,7 @@ function hydrateShopAndPricing() {
   }
 
   if (tableBody) {
-    tableBody.innerHTML = CATALOG.map(prod => {
+    tableBody.innerHTML = activeCatalog.map(prod => {
       const savePercent = Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100);
       return `
         <div class="pricing-row">
@@ -380,7 +413,7 @@ window.triggerCheckoutFlow = async function(productId) {
     window.openAuthModal();
     return;
   }
-  const prod = CATALOG.find(p => p.id === productId);
+  const prod = activeCatalog.find(p => p.id === productId);
   if (!prod) return;
 
   pendingCheckoutProductId = productId;
@@ -404,7 +437,7 @@ window.closeCheckoutAddressModal = function() {
 };
 
 window.submitCheckoutAddress = async function() {
-  const product = CATALOG.find(p => p.id === pendingCheckoutProductId);
+  const product = activeCatalog.find(p => p.id === pendingCheckoutProductId);
   const error = document.getElementById('checkoutError');
   const button = document.getElementById('checkoutSubmitBtn');
   if (!product || !currentCustomer) return;
@@ -516,8 +549,7 @@ function initScrollAnimations() {
 
 // ─── DOM INITIATOR SAFE ASYNC LAYER ───────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  hydrateShopAndPricing();
-  initScrollAnimations();
+  hydrateShopAndPricing().then(initScrollAnimations);
   restoreCustomerSession();
   
   setTimeout(() => {
