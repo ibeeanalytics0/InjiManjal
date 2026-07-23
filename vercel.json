@@ -26,7 +26,7 @@
     { "source": "/api/shop/payment/verify", "destination": "/api/shop?action=verify-payment" },
     { "source": "/api/x/settings", "destination": "/api/x/products" },
     { "source": "/api/x/products", "destination": "/api/x/products" },
-    { "source": "/api/x/products/:id", "destination": "/api/x/products" },
+    { "source": "/api/x/products/:id", "destination": "/api/x/products?id=:id" },
     { "source": "/api/x/coupons", "destination": "/api/x" },
     { "source": "/api/x/coupons/:id", "destination": "/api/x" },
     { "source": "/api/x/customers", "destination": "/api/x" },

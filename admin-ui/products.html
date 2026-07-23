@@ -37,6 +37,16 @@
   <script>
     renderTopbar('products.html');
 
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;',
+      }[character]));
+    }
+
     async function loadProducts() {
       const res = await adminFetch('/api/x/products');
       if (!res) return;
@@ -50,19 +60,56 @@
 
       tbody.innerHTML = products.map(p => `
         <tr>
-          <td>${p.name}</td>
+          <td>${escapeHtml(p.name)}</td>
           <td>${p.sale_price ? `<s>₹${p.price}</s> ₹${p.sale_price}` : `₹${p.price}`}</td>
-          <td>${p.stock}</td>
-          <td>${p.is_active ? '✅ Active' : '❌ Inactive'}</td>
-          <td><button class="secondary" onclick="removeProduct(${p.id})">${p.is_active ? 'Deactivate' : '—'}</button></td>
+          <td>
+            <div class="stock-control">
+              <input type="number" id="stock-${p.id}" value="${p.stock}" min="0" step="1">
+              <button type="button" onclick="updateStock(${p.id})">Update</button>
+            </div>
+          </td>
+          <td>${p.is_active ? 'Active' : 'Inactive'}</td>
+          <td>
+            <button class="secondary" onclick="toggleProductStatus(${p.id}, ${!p.is_active})">
+              ${p.is_active ? 'Deactivate' : 'Activate'}
+            </button>
+          </td>
         </tr>
       `).join('');
     }
 
-    async function removeProduct(id) {
-      if (!confirm('Deactivate this product?')) return;
-      const res = await adminFetch(`/api/x/products/${id}`, { method: 'DELETE' });
-      if (res && res.ok) loadProducts();
+    async function updateStock(id) {
+      const input = document.getElementById(`stock-${id}`);
+      const stock = parseInt(input.value, 10);
+      if (!Number.isInteger(stock) || stock < 0) {
+        alert('Enter a valid stock number.');
+        return;
+      }
+
+      const res = await adminFetch(`/api/x/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ stock }),
+      });
+      if (res && res.ok) {
+        loadProducts();
+      } else if (res) {
+        const err = await res.json();
+        alert(err.error || 'Could not update stock');
+      }
+    }
+
+    async function toggleProductStatus(id, isActive) {
+      if (!confirm(`${isActive ? 'Activate' : 'Deactivate'} this product?`)) return;
+      const res = await adminFetch(`/api/x/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ is_active: isActive }),
+      });
+      if (res && res.ok) {
+        loadProducts();
+      } else if (res) {
+        const err = await res.json();
+        alert(err.error || 'Could not update product status');
+      }
     }
 
     document.getElementById('addForm').addEventListener('submit', async (e) => {

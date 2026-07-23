@@ -22,3 +22,5 @@ button, .btn { background: #6b7a3f; color: #fff; border: none; padding: 0.5rem 1
 button.secondary { background: #999; }
 input, select { padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; margin-right: 0.5rem; }
 .empty { color: #999; padding: 2rem; text-align: center; }
+.stock-control { display: flex; align-items: center; gap: 0.5rem; }
+.stock-control input { width: 90px; margin-right: 0; }

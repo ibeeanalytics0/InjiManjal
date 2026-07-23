@@ -115,6 +115,7 @@ async function handler(req, res) {
   const url = req.url || '';
   const cleanPath = url.split('?')[0];
   const pathParts = cleanPath.split('/').filter(Boolean); // Example: ['api', 'x', 'products', '123'] or ['api', 'x', 'settings']
+  const idFromQuery = req.query?.id;
 
   // Route group destination resolution
   if (pathParts.includes('settings')) {
@@ -125,8 +126,8 @@ async function handler(req, res) {
 
   if (pathParts.includes('products')) {
     // If there is an ID at the end of the path array (e.g. /api/x/products/45)
-    if (pathParts.length > 3) {
-      const id = pathParts[3];
+    const id = idFromQuery || (pathParts.length > 3 ? pathParts[3] : null);
+    if (id) {
       if (req.method === 'PUT') return await handleUpdateProduct(req, res, id);
       if (req.method === 'DELETE') return await handleDeleteProduct(req, res, id);
       return res.status(405).json({ error: 'Method not allowed' });
