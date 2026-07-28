@@ -20,7 +20,11 @@ th { color: #888; font-weight: 600; font-size: 0.8rem; text-transform: uppercase
 .badge.CANCELLED { background: #f8d7da; color: #721c24; }
 button, .btn { background: #6b7a3f; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
 button.secondary { background: #999; }
-input, select { padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; margin-right: 0.5rem; }
+input, select, textarea { padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; margin: 0 0.5rem 0.7rem 0; }
+textarea { display: block; width: min(100%, 640px); min-height: 90px; resize: vertical; }
 .empty { color: #999; padding: 2rem; text-align: center; }
 .stock-control { display: flex; align-items: center; gap: 0.5rem; }
 .stock-control input { width: 90px; margin-right: 0; }
+
+.table-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+button.danger { background: #a94442; }
