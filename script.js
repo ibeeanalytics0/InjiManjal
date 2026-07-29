@@ -1,54 +1,445 @@
-// ─── FULL CATALOG from InjiManjal Menu (INR ₹) ───────────────────────────
-const CATALOG = [
-  { id: 1,  name: "Honey Figs",                 slug: "honey-figs",                category: "wellness", emoji: "🍯", price: 95,  marketPrice: 160, unit: "50g",    badge: "Natural",     tags: ["Sun-Dried", "Premium Honey"] },
-  { id: 2,  name: "Pure Honey",                 slug: "pure-honey",                category: "wellness", emoji: "🍯", price: 344, marketPrice: 520, unit: "250g",   badge: "Raw",         tags: ["Unprocessed", "Pure"] },
-  { id: 3,  name: "Fig Powder",                 slug: "fig-powder",                category: "wellness", emoji: "🫙", price: 95,  marketPrice: 160, unit: "50g",    badge: "Natural",     tags: ["Sweetener", "Nutritious"] },
-  { id: 4,  name: "Butterfly Pea Flower",       slug: "butterfly-pea-flower",     category: "tea",      emoji: "💙", price: 39,  marketPrice: 70,  unit: "10g",    badge: "Organic",     tags: ["Antioxidant", "Vibrant"] },
-  { id: 5,  name: "Black Kavuni Rice",          slug: "black-kavuni-rice",        category: "rice",     emoji: "🌾", price: 245, marketPrice: 420, unit: "1 kg",   badge: "Heritage",    tags: ["Non-GMO", "Chemical-Free"] },
-  { id: 6,  name: "Seeraga Samba Rice",         slug: "seeraga-samba-rice",       category: "rice",     emoji: "🌾", price: 229, marketPrice: 380, unit: "1 kg",   badge: "Aromatic",    tags: ["Native Seed", "High Aroma"] },
-  { id: 7,  name: "Sivan Samba Ponni Rice",     slug: "sivan-samba-ponni-rice",   category: "rice",     emoji: "🌾", price: 169, marketPrice: 280, unit: "1 kg",   badge: "Traditional", tags: ["Strength", "Heritage"] },
-  { id: 8,  name: "Lemon Butterfly Pea Tea",   slug: "butterfly-pea-tea",        category: "tea",      emoji: "🫖", price: 79,  marketPrice: 140, unit: "15g",    badge: "Organic",     tags: ["Caffeine Free", "Colour Changing"] },
-  { id: 9,  name: "Tomato Soup",                slug: "tomato-soup",              category: "soup",     emoji: "🥣", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Instant",     tags: ["No MSG", "Natural"] },
-  { id: 10, name: "Mudakathan Soup",            slug: "mudakathan-soup",          category: "soup",     emoji: "🥣", price: 59,  marketPrice: 100, unit: "50g",    badge: "Herbal",      tags: ["Joint Care", "Traditional"] },
-  { id: 11, name: "Drumstick Leaves Soup",      slug: "drumstick-leaves-soup",    category: "soup",     emoji: "🥣", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Iron Rich",   tags: ["Moringa", "Nutritious"] },
-  { id: 12, name: "Mudavattukal Soup",          slug: "mudavattukal-soup",          category: "soup",     emoji: "🥣", price: 179, marketPrice: 280, unit: "50g",    badge: "Traditional", tags: ["Authentic", "Herbal"] },
-  { id: 13, name: "Black Kavuni Porridge Mix", slug: "black-kavuni-porridge",    category: "soup",     emoji: "🥣", price: 199, marketPrice: 320, unit: "200g",   badge: "Nutritious",  tags: ["Antioxidant", "Heritage"] },
-  { id: 14, name: "Black Gram Porridge Mix",   slug: "black-gram-porridge",      category: "soup",     emoji: "🥣", price: 189, marketPrice: 300, unit: "200g",   badge: "Protein",     tags: ["High Protein", "Traditional"] },
-  { id: 15, name: "Millet Porridge Mix",       slug: "millet-porridge",          category: "soup",     emoji: "🥣", price: 209, marketPrice: 340, unit: "200g",   badge: "Millet",      tags: ["Gluten Free", "Energy"] },
-  { id: 16, name: "Drumstick Leaves Adai Mix", slug: "drumstick-adai-mix",        category: "soup",     emoji: "🫙", price: 199, marketPrice: 320, unit: "200g",   badge: "Breakfast",   tags: ["Iron Rich", "Traditional"] },
-  { id: 17, name: "Vallarai Powder (Paruppu Podi)", slug: "vallarai-podi",        category: "podi",     emoji: "🫙", price: 199, marketPrice: 320, unit: "100g",   badge: "Memory Herb", tags: ["Brain Health", "Pure Grind"] },
-  { id: 18, name: "Curry Leaves Powder",       slug: "curry-leaf-podi",          category: "podi",     emoji: "🌿", price: 199, marketPrice: 320, unit: "100g",   badge: "Authentic",   tags: ["Iron Rich", "Flavour Boost"] },
-  { id: 19, name: "Drumstick Leaves Dal Powder", slug: "drumstick-dal-powder",   category: "podi",     emoji: "🫙", price: 199, marketPrice: 320, unit: "100g",   badge: "Traditional", tags: ["Moringa", "Healthy Podi"] },
-  { id: 20, name: "Rice Vadam",                slug: "rice-vadam",               category: "vadam",    emoji: "🌞", price: 49,  marketPrice: 90,  unit: "100g",   badge: "Handmade",    tags: ["Sun-Dried", "Native Rice"] },
-  { id: 21, name: "Onion Vadam",               slug: "onion-vadam",              category: "vadam",    emoji: "🧅", price: 55,  marketPrice: 100, unit: "50g",    badge: "Traditional", tags: ["Small Batch", "No Preservatives"] },
-  { id: 22, name: "Cluster Beans Vathal",      slug: "cluster-beans-vathal",     category: "vadam",    emoji: "🌱", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Handmade",    tags: ["Sun-Dried", "Pure"] },
-  { id: 23, name: "Brinjal Vathal",            slug: "brinjal-vathal",           category: "vadam",    emoji: "🍆", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Traditional", tags: ["Sun-Dried", "Authentic"] },
-  { id: 24, name: "Bittergourd Vathal",        slug: "bittergourd-vathal",       category: "vadam",    emoji: "🥒", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Traditional", tags: ["Diabetic Friendly", "Sun-Dried"] },
-  { id: 25, name: "Potato Vathal",             slug: "potato-vathal",            category: "vadam",    emoji: "🥔", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Handmade",    tags: ["Sun-Dried", "Crispy"] },
-  { id: 26, name: "Turkey Berry Vathal",       slug: "turkey-berry-vathal",      category: "vadam",    emoji: "🫐", price: 55,  marketPrice: 100, unit: "50g",    badge: "Rare",        tags: ["Sundakkai", "Medicinal"] },
-  { id: 27, name: "Sorrel Leaves Thokku",      slug: "sorrel-thokku",            category: "pickle",   emoji: "🫙", price: 229, marketPrice: 360, unit: "230g",   badge: "Tangy",       tags: ["Pulicaikeeral", "Traditional"] },
-  { id: 28, name: "Lemon Pickle",              slug: "lemon-pickle",             category: "pickle",   emoji: "🍋", price: 210, marketPrice: 340, unit: "230g",   badge: "Classic",     tags: ["Tangy", "No Preservatives"] },
-  { id: 29, name: "Mangai Vathal",             slug: "mangai-vathal",            category: "pickle",   emoji: "🥭", price: 49,  marketPrice: 90,  unit: "50g",    badge: "Seasonal",    tags: ["Raw Mango", "Traditional"] },
-  { id: 30, name: "Garlic Pickle",             slug: "garlic-pickle",            category: "pickle",   emoji: "🧄", price: 229, marketPrice: 360, unit: "230g",   badge: "Spicy",       tags: ["Bold Flavour", "No MSG"] },
-  { id: 31, name: "Green Gram Soup",           slug: "green-gram-soup",          category: "soup",     emoji: "🥣", price: 99,  marketPrice: 160, unit: "50g",    badge: "Protein",     tags: ["Weight Loss", "Fibre Rich"] },
-  { id: 32, name: "Seenthal Powder Soup",      slug: "seenthal-soup",            category: "soup",     emoji: "🥣", price: 120, marketPrice: 200, unit: "50g",    badge: "Herbal",      tags: ["Diabetes", "Immunity"] },
-  { id: 33, name: "Thuthi Leaf Soup",          slug: "thuthi-leaf-soup",         category: "soup",     emoji: "🥣", price: 126, marketPrice: 210, unit: "50g",    badge: "Healing",     tags: ["Wounds", "Skin Health"] },
-  { id: 34, name: "Yanai Nerunjil Mul",        slug: "yanai-nerunjil",           category: "soup",     emoji: "🥣", price: 120, marketPrice: 200, unit: "50g",    badge: "Siddha",      tags: ["Renal Health", "Detox"] },
-  { id: 35, name: "Ragi Cookies",              slug: "ragi-cookies",             category: "cookies",  emoji: "🍪", price: 59,  marketPrice: 100, unit: "10 pcs", badge: "Healthy",     tags: ["Calcium Rich", "Natural"] },
-  { id: 36, name: "Kambu Cookies",             slug: "kambu-cookies",            category: "cookies",  emoji: "🍪", price: 59,  marketPrice: 100, unit: "10 pcs", badge: "Millet",      tags: ["Energy", "Natural"] },
-  { id: 37, name: "Munthiri (Cashew) Cookies", slug: "cashew-cookies",           category: "cookies",  emoji: "🍪", price: 59,  marketPrice: 100, unit: "10 pcs", badge: "Premium",     tags: ["Cashew", "Crunchy"] },
-  { id: 38, name: "Verkadalai (Peanut) Cookies", slug: "peanut-cookies",         category: "cookies",  emoji: "🍪", price: 59,  marketPrice: 100, unit: "10 pcs", badge: "Protein",     tags: ["Peanut", "Wholesome"] },
-  { id: 39, name: "Coconut Cookies",           slug: "coconut-cookies",          category: "cookies",  emoji: "🍪", price: 59,  marketPrice: 100, unit: "10 pcs", badge: "Natural",     tags: ["Coconut", "Traditional"] },
-  { id: 40, name: "Pirandai Oil",              slug: "pirandai-oil",             category: "oil",      emoji: "🫙", price: 160, marketPrice: 260, unit: "100ml",  badge: "Herbal",      tags: ["Joint Relief", "Circulation"] },
-  { id: 41, name: "Green Gram Soap",           slug: "green-gram-soap",          category: "soap",     emoji: "🟩", price: 159, marketPrice: 250, unit: "75g",    badge: "Natural",     tags: ["Cleansing", "Pimple Care"] },
-  { id: 42, name: "Guava Podi",                slug: "guava-podi",               category: "podi",     emoji: "🍈", price: 70,  marketPrice: 120, unit: "50g",    badge: "Immunity",    tags: ["Blood Sugar", "Digestive"] },
-  { id: 43, name: "Coconut Idly Podi",         slug: "coconut-idly-podi",        category: "podi",     emoji: "🥥", price: 72,  marketPrice: 120, unit: "50g",    badge: "Breakfast",   tags: ["Coconut", "No Additives"] },
-];
+// Product display metadata only. Real product records come from Supabase/admin.
+const CATALOG_META = {
+  "honey-figs": {
+    "emoji": "🍯",
+    "unit": "50g",
+    "badge": "Natural",
+    "tags": [
+      "Sun-Dried",
+      "Premium Honey"
+    ],
+    "marketPrice": 160
+  },
+  "pure-honey": {
+    "emoji": "🍯",
+    "unit": "250g",
+    "badge": "Raw",
+    "tags": [
+      "Unprocessed",
+      "Pure"
+    ],
+    "marketPrice": 520
+  },
+  "fig-powder": {
+    "emoji": "🫙",
+    "unit": "50g",
+    "badge": "Natural",
+    "tags": [
+      "Sweetener",
+      "Nutritious"
+    ],
+    "marketPrice": 160
+  },
+  "butterfly-pea-flower": {
+    "emoji": "💙",
+    "unit": "10g",
+    "badge": "Organic",
+    "tags": [
+      "Antioxidant",
+      "Vibrant"
+    ],
+    "marketPrice": 70
+  },
+  "black-kavuni-rice": {
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "badge": "Heritage",
+    "tags": [
+      "Non-GMO",
+      "Chemical-Free"
+    ],
+    "marketPrice": 420
+  },
+  "seeraga-samba-rice": {
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "badge": "Aromatic",
+    "tags": [
+      "Native Seed",
+      "High Aroma"
+    ],
+    "marketPrice": 380
+  },
+  "sivan-samba-ponni-rice": {
+    "emoji": "🌾",
+    "unit": "1 kg",
+    "badge": "Traditional",
+    "tags": [
+      "Strength",
+      "Heritage"
+    ],
+    "marketPrice": 280
+  },
+  "butterfly-pea-tea": {
+    "emoji": "🫖",
+    "unit": "15g",
+    "badge": "Organic",
+    "tags": [
+      "Caffeine Free",
+      "Colour Changing"
+    ],
+    "marketPrice": 140
+  },
+  "tomato-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Instant",
+    "tags": [
+      "No MSG",
+      "Natural"
+    ],
+    "marketPrice": 90
+  },
+  "mudakathan-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Herbal",
+    "tags": [
+      "Joint Care",
+      "Traditional"
+    ],
+    "marketPrice": 100
+  },
+  "drumstick-leaves-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Iron Rich",
+    "tags": [
+      "Moringa",
+      "Nutritious"
+    ],
+    "marketPrice": 90
+  },
+  "mudavattukal-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Traditional",
+    "tags": [
+      "Authentic",
+      "Herbal"
+    ],
+    "marketPrice": 280
+  },
+  "black-kavuni-porridge": {
+    "emoji": "🥣",
+    "unit": "200g",
+    "badge": "Nutritious",
+    "tags": [
+      "Antioxidant",
+      "Heritage"
+    ],
+    "marketPrice": 320
+  },
+  "black-gram-porridge": {
+    "emoji": "🥣",
+    "unit": "200g",
+    "badge": "Protein",
+    "tags": [
+      "High Protein",
+      "Traditional"
+    ],
+    "marketPrice": 300
+  },
+  "millet-porridge": {
+    "emoji": "🥣",
+    "unit": "200g",
+    "badge": "Millet",
+    "tags": [
+      "Gluten Free",
+      "Energy"
+    ],
+    "marketPrice": 340
+  },
+  "drumstick-adai-mix": {
+    "emoji": "🫙",
+    "unit": "200g",
+    "badge": "Breakfast",
+    "tags": [
+      "Iron Rich",
+      "Traditional"
+    ],
+    "marketPrice": 320
+  },
+  "vallarai-podi": {
+    "emoji": "🫙",
+    "unit": "100g",
+    "badge": "Memory Herb",
+    "tags": [
+      "Brain Health",
+      "Pure Grind"
+    ],
+    "marketPrice": 320
+  },
+  "curry-leaf-podi": {
+    "emoji": "🌿",
+    "unit": "100g",
+    "badge": "Authentic",
+    "tags": [
+      "Iron Rich",
+      "Flavour Boost"
+    ],
+    "marketPrice": 320
+  },
+  "drumstick-dal-powder": {
+    "emoji": "🫙",
+    "unit": "100g",
+    "badge": "Traditional",
+    "tags": [
+      "Moringa",
+      "Healthy Podi"
+    ],
+    "marketPrice": 320
+  },
+  "rice-vadam": {
+    "emoji": "🌞",
+    "unit": "100g",
+    "badge": "Handmade",
+    "tags": [
+      "Sun-Dried",
+      "Native Rice"
+    ],
+    "marketPrice": 90
+  },
+  "onion-vadam": {
+    "emoji": "🧅",
+    "unit": "50g",
+    "badge": "Traditional",
+    "tags": [
+      "Small Batch",
+      "No Preservatives"
+    ],
+    "marketPrice": 100
+  },
+  "cluster-beans-vathal": {
+    "emoji": "🌱",
+    "unit": "50g",
+    "badge": "Handmade",
+    "tags": [
+      "Sun-Dried",
+      "Pure"
+    ],
+    "marketPrice": 90
+  },
+  "brinjal-vathal": {
+    "emoji": "🍆",
+    "unit": "50g",
+    "badge": "Traditional",
+    "tags": [
+      "Sun-Dried",
+      "Authentic"
+    ],
+    "marketPrice": 90
+  },
+  "bittergourd-vathal": {
+    "emoji": "🥒",
+    "unit": "50g",
+    "badge": "Traditional",
+    "tags": [
+      "Diabetic Friendly",
+      "Sun-Dried"
+    ],
+    "marketPrice": 90
+  },
+  "potato-vathal": {
+    "emoji": "🥔",
+    "unit": "50g",
+    "badge": "Handmade",
+    "tags": [
+      "Sun-Dried",
+      "Crispy"
+    ],
+    "marketPrice": 90
+  },
+  "turkey-berry-vathal": {
+    "emoji": "🫐",
+    "unit": "50g",
+    "badge": "Rare",
+    "tags": [
+      "Sundakkai",
+      "Medicinal"
+    ],
+    "marketPrice": 100
+  },
+  "sorrel-thokku": {
+    "emoji": "🫙",
+    "unit": "230g",
+    "badge": "Tangy",
+    "tags": [
+      "Pulicaikeeral",
+      "Traditional"
+    ],
+    "marketPrice": 360
+  },
+  "lemon-pickle": {
+    "emoji": "🍋",
+    "unit": "230g",
+    "badge": "Classic",
+    "tags": [
+      "Tangy",
+      "No Preservatives"
+    ],
+    "marketPrice": 340
+  },
+  "mangai-vathal": {
+    "emoji": "🥭",
+    "unit": "50g",
+    "badge": "Seasonal",
+    "tags": [
+      "Raw Mango",
+      "Traditional"
+    ],
+    "marketPrice": 90
+  },
+  "garlic-pickle": {
+    "emoji": "🧄",
+    "unit": "230g",
+    "badge": "Spicy",
+    "tags": [
+      "Bold Flavour",
+      "No MSG"
+    ],
+    "marketPrice": 360
+  },
+  "green-gram-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Protein",
+    "tags": [
+      "Weight Loss",
+      "Fibre Rich"
+    ],
+    "marketPrice": 160
+  },
+  "seenthal-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Herbal",
+    "tags": [
+      "Diabetes",
+      "Immunity"
+    ],
+    "marketPrice": 200
+  },
+  "thuthi-leaf-soup": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Healing",
+    "tags": [
+      "Wounds",
+      "Skin Health"
+    ],
+    "marketPrice": 210
+  },
+  "yanai-nerunjil": {
+    "emoji": "🥣",
+    "unit": "50g",
+    "badge": "Siddha",
+    "tags": [
+      "Renal Health",
+      "Detox"
+    ],
+    "marketPrice": 200
+  },
+  "ragi-cookies": {
+    "emoji": "🍪",
+    "unit": "10 pcs",
+    "badge": "Healthy",
+    "tags": [
+      "Calcium Rich",
+      "Natural"
+    ],
+    "marketPrice": 100
+  },
+  "kambu-cookies": {
+    "emoji": "🍪",
+    "unit": "10 pcs",
+    "badge": "Millet",
+    "tags": [
+      "Energy",
+      "Natural"
+    ],
+    "marketPrice": 100
+  },
+  "cashew-cookies": {
+    "emoji": "🍪",
+    "unit": "10 pcs",
+    "badge": "Premium",
+    "tags": [
+      "Cashew",
+      "Crunchy"
+    ],
+    "marketPrice": 100
+  },
+  "peanut-cookies": {
+    "emoji": "🍪",
+    "unit": "10 pcs",
+    "badge": "Protein",
+    "tags": [
+      "Peanut",
+      "Wholesome"
+    ],
+    "marketPrice": 100
+  },
+  "coconut-cookies": {
+    "emoji": "🍪",
+    "unit": "10 pcs",
+    "badge": "Natural",
+    "tags": [
+      "Coconut",
+      "Traditional"
+    ],
+    "marketPrice": 100
+  },
+  "pirandai-oil": {
+    "emoji": "🫙",
+    "unit": "100ml",
+    "badge": "Herbal",
+    "tags": [
+      "Joint Relief",
+      "Circulation"
+    ],
+    "marketPrice": 260
+  },
+  "green-gram-soap": {
+    "emoji": "🟩",
+    "unit": "75g",
+    "badge": "Natural",
+    "tags": [
+      "Cleansing",
+      "Pimple Care"
+    ],
+    "marketPrice": 250
+  },
+  "guava-podi": {
+    "emoji": "🍈",
+    "unit": "50g",
+    "badge": "Immunity",
+    "tags": [
+      "Blood Sugar",
+      "Digestive"
+    ],
+    "marketPrice": 120
+  },
+  "coconut-idly-podi": {
+    "emoji": "🥥",
+    "unit": "50g",
+    "badge": "Breakfast",
+    "tags": [
+      "Coconut",
+      "No Additives"
+    ],
+    "marketPrice": 120
+  }
+};
 
+const CATEGORY_EMOJI = {
+  wellness: '🌿', tea: '🍵', rice: '🌾', soup: '🥣', podi: '🫙',
+  vadam: '☀️', pickle: '🫙', cookies: '🍪', oil: '🫙', soap: '🟩', organic: '🌿',
+};
 let isLoginMode = true;
 let currentCustomer = null;
 let pendingCheckoutProductId = null;
-let activeCatalog = CATALOG;
+let activeCatalog = [];
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, character => ({
@@ -322,33 +713,37 @@ async function restoreCustomerSession() {
 }
 
 // ─── HYDRATION FUNCTIONS ──────────────────────────────────────────────────
+function buildCatalogProduct(live) {
+  const meta = CATALOG_META[live.slug] || {};
+  const category = String(live.category || 'organic').toLowerCase();
+  const price = Number(live.sale_price || live.price || 0);
+  const marketPrice = Math.max(Number(live.price || price), Number(meta.marketPrice || price));
+  const stock = Number(live.stock || 0);
+  return {
+    id: live.id,
+    name: live.name || 'Product',
+    slug: live.slug || String(live.id),
+    category,
+    emoji: meta.emoji || CATEGORY_EMOJI[category] || CATEGORY_EMOJI.organic,
+    price,
+    marketPrice,
+    unit: meta.unit || 'unit',
+    badge: stock > 0 ? (meta.badge || 'Available') : 'Out of Stock',
+    tags: Array.isArray(meta.tags) && meta.tags.length ? meta.tags : [category, stock > 0 ? 'In Stock' : 'Out of Stock'],
+    imageUrl: live.image_url || '',
+    stock,
+  };
+}
+
 async function loadLiveCatalog() {
   try {
     const response = await fetch('/api/shop/products');
-    if (!response.ok) return CATALOG;
+    if (!response.ok) return [];
     const data = await response.json();
     const liveProducts = Array.isArray(data.products) ? data.products : [];
-    if (!liveProducts.length) return CATALOG;
-
-    const liveBySlug = new Map(liveProducts.map(product => [product.slug, product]));
-    return CATALOG
-      .map(product => {
-        const live = liveBySlug.get(product.slug);
-        if (!live) return null;
-        const price = Number(live.sale_price || live.price);
-        return {
-          ...product,
-          id: live.id,
-          name: live.name || product.name,
-          category: live.category || product.category,
-          price,
-          marketPrice: Math.max(product.marketPrice, Number(live.price || price)),
-          stock: Number(live.stock || 0),
-        };
-      })
-      .filter(Boolean);
+    return liveProducts.map(buildCatalogProduct);
   } catch (error) {
-    return CATALOG;
+    return [];
   }
 }
 
@@ -359,55 +754,66 @@ async function hydrateShopAndPricing() {
   const tableBody = document.getElementById('pricing-table-rows');
 
   if (grid) {
-    grid.innerHTML = activeCatalog.map(prod => {
-      const savePercent = Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100);
-      return `
+    if (activeCatalog.length === 0) {
+      grid.innerHTML = '<div class="products-empty">Products are being updated. Please check back soon.</div>';
+    } else {
+      grid.innerHTML = activeCatalog.map(prod => {
+        const savePercent = prod.marketPrice > prod.price
+          ? Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100)
+          : 0;
+        return `
         <div class="product-card bg-teal-950/30 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-md flex flex-col justify-between" data-cat="${prod.category}">
-          <div class="h-44 bg-gradient-to-br from-emerald-950 to-amber-950 flex items-center justify-center text-4xl relative">
-            ${prod.emoji}
+          <div class="h-44 bg-gradient-to-br from-emerald-950 to-amber-950 flex items-center justify-center text-4xl relative overflow-hidden">
+            ${prod.imageUrl ? '<img src="' + escapeHtml(prod.imageUrl) + '" alt="' + escapeHtml(prod.name) + '" class="product-image">' : prod.emoji}
             <div class="product-badge absolute top-3 right-3 bg-amber-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">${prod.badge}</div>
           </div>
           <div class="p-5 flex-grow flex flex-col justify-between space-y-3">
             <div class="space-y-1">
               <div class="text-[10px] tracking-widest uppercase text-amber-400 font-semibold">${prod.category}</div>
-              <h3 class="font-serif text-base text-white font-medium leading-tight">${prod.name}</h3>
+              <h3 class="font-serif text-base text-white font-medium leading-tight">${escapeHtml(prod.name)}</h3>
               <div class="flex flex-wrap gap-1.5 pt-1">
-                ${prod.tags.map(t => `<span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">${t}</span>`).join('')}
+                ${prod.tags.map(t => `<span class="text-[10px] text-white/80 bg-white/10 px-2 py-0.5 rounded-md border border-white/10">${escapeHtml(t)}</span>`).join('')}
               </div>
             </div>
             <div>
               <div class="flex items-center justify-between pt-2 pb-3">
-                <span class="text-white font-serif text-base font-bold">₹${prod.price} <small class="text-[10px] text-white/50 font-sans font-normal">/ ${prod.unit}</small></span>
+                <span class="text-white font-serif text-base font-bold">₹${prod.price} <small class="text-[10px] text-white/50 font-sans font-normal">/ ${escapeHtml(prod.unit)}</small></span>
                 <span class="text-xs text-white/40 line-through">₹${prod.marketPrice}</span>
                 <span class="text-[10px] bg-red-800 text-white font-bold px-2 py-0.5 rounded-md">Save ${savePercent}%</span>
               </div>
-              <button class="btn-primary w-full py-2 text-xs rounded-xl font-semibold" onclick="triggerCheckoutFlow(${prod.id})">🛒 Buy Now — ₹${prod.price}</button>
+              <button class="btn-primary w-full py-2 text-xs rounded-xl font-semibold" ${prod.stock <= 0 ? 'disabled' : ''} onclick="triggerCheckoutFlow(${prod.id})">${prod.stock <= 0 ? 'Out of Stock' : '🛒 Buy Now — ₹' + prod.price}</button>
             </div>
           </div>
         </div>`;
-    }).join('');
+      }).join('');
+    }
   }
 
   if (tableBody) {
-    tableBody.innerHTML = activeCatalog.map(prod => {
-      const savePercent = Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100);
-      return `
+    if (activeCatalog.length === 0) {
+      tableBody.innerHTML = '<div class="pricing-empty">Products are being updated.</div>';
+    } else {
+      tableBody.innerHTML = activeCatalog.map(prod => {
+        const savePercent = prod.marketPrice > prod.price
+          ? Math.round(((prod.marketPrice - prod.price) / prod.marketPrice) * 100)
+          : 0;
+        return `
         <div class="pricing-row">
           <div class="pricing-product">
             <span class="p-ico">${prod.emoji}</span>
             <div class="p-details">
-              <strong>${prod.name}</strong>
-              <span>${prod.unit} · Sourced Direct</span>
+              <strong>${escapeHtml(prod.name)}</strong>
+              <span>${escapeHtml(prod.unit)} · Sourced Direct</span>
             </div>
           </div>
           <span class="store-price">₹${prod.marketPrice}</span>
           <span class="im-price">₹${prod.price}</span>
           <span class="savings-badge">Save ${savePercent}%</span>
         </div>`;
-    }).join('');
+      }).join('');
+    }
   }
 }
-
 window.triggerCheckoutFlow = async function(productId) {
   if (!currentCustomer) {
     window.openAuthModal();
@@ -415,6 +821,10 @@ window.triggerCheckoutFlow = async function(productId) {
   }
   const prod = activeCatalog.find(p => p.id === productId);
   if (!prod) return;
+  if (prod.stock <= 0) {
+    alert('This product is currently out of stock.');
+    return;
+  }
 
   pendingCheckoutProductId = productId;
   window.openCheckoutAddressModal(prod);
